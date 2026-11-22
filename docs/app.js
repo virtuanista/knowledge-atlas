@@ -42,7 +42,7 @@
   // ---------- util ----------
   const smooth = (a, b, x) => { const t = clamp((x - a) / (b - a), 0, 1); return t * t * (3 - 2 * t); };
   // radio del punto en pantalla: mate, con mínimo legible
-  const rdPx = (nd) => clamp(AR * 0.5 * (0.9 + 0.05 * Math.min(nd.k, 20)) * view.k, 1.5, 5.5);
+  const rdPx = (nd) => clamp(AR * 0.6 * (0.9 + 0.05 * Math.min(nd.k, 20)) * view.k, 2.5, 6.5);
   const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
   const hue = (i) => (i * 137.508) % 360;
   const fmt = (n) => n.toLocaleString("es-ES");
@@ -244,6 +244,7 @@
       ctx.globalAlpha = dim * (nd.x ? 0.4 : 0.95);
       ctx.fillStyle = MATTE[nd.c];
       ctx.beginPath(); ctx.arc(sx, sy, r, 0, Math.PI * 2); ctx.fill();
+      ctx.lineWidth = 0.8; ctx.strokeStyle = "rgba(0,0,0,.55)"; ctx.stroke();
     }
     ctx.globalAlpha = 1;
 
@@ -279,7 +280,14 @@
       moveCard(lastPt.x, lastPt.y);
     }
   }
-  // previews en canvas: tarjeta por punto, colocadas sin solaparse entre sí
+  // recorta texto con elipsis medido en píxeles (nunca corta una palabra a la mitad)
+  function fitText(text, maxW) {
+    if (ctx.measureText(text).width <= maxW) return text;
+    let t = text;
+    while (t.length > 1 && ctx.measureText(t + "…").width > maxW) t = t.slice(0, -1);
+    return t.trimEnd() + "…";
+  }
+  // previews en canvas: tarjeta por punto, a distancia del punto, sin tapar otros puntos ni otras tarjetas
   function drawPreviews(pv, vis, fi) {
     const cx = W / 2, cy = H / 2;
     const cand = vis.filter((i) => i !== fi && !hidden.has(NODES[i].c));
@@ -288,52 +296,66 @@
       return { i, sx, sy, d: Math.hypot(sx - cx, sy - cy) };
     }).filter((p) => p.sx > 0 && p.sy > 0 && p.sx < W && p.sy < H);
     pts.sort((a, b) => a.d - b.d);
-    const CW = 206, CH = 58, placed = [], maxCards = 70;
-    // puntos visibles: una tarjeta nunca tapa a otro punto
     const dots = vis.map((i) => {
       const [sx, sy] = w2s(NODES[i].X, NODES[i].Y);
-      return [sx, sy, rdPx(NODES[i]) + 2];
+      return [sx, sy, rdPx(NODES[i]) + 4];
     });
-    const hitsDot = (x, y) => dots.some(([cx, cy, r]) => {
-      const nx = clamp(cx, x, x + CW), ny = clamp(cy, y, y + CH);
-      return Math.hypot(cx - nx, cy - ny) < r;
+    const hitsDot = (x, y, w, h) => dots.some(([dx, dy, r]) => {
+      const nx = clamp(dx, x, x + w), ny = clamp(dy, y, y + h);
+      return Math.hypot(dx - nx, dy - ny) < r;
     });
+    const CH = 52, GAP = 18, MAXCARDS = 60, MARGIN = 12, TOP = 52;
+    const placed = [];
     ctx.save();
-    ctx.filter = `blur(${((1 - pv) * 7).toFixed(2)}px)`;
+    ctx.filter = `blur(${((1 - pv) * 5).toFixed(2)}px)`;
     ctx.globalAlpha = pv;
     let n = 0;
     for (const p of pts) {
-      if (n >= maxCards) break;
-      const nd = NODES[p.i];
-      const cands = [[p.sx + 14, p.sy - CH / 2], [p.sx - CW - 14, p.sy - CH / 2],
-                     [p.sx + 14, p.sy - CH - 14], [p.sx - CW - 14, p.sy + 14],
-                     [p.sx + 14, p.sy + 14], [p.sx - CW - 14, p.sy - CH - 14]];
+      if (n >= MAXCARDS) break;
+      const nd = NODES[p.i], col = CLUS[nd.c].h;
+      ctx.font = "600 12px system-ui,sans-serif";
+      const title = fitText(nd.t, 220);
+      ctx.font = "10px system-ui,sans-serif";
+      const host = fitText(nd.h, 220);
+      const desc = fitText(nd.d, 220);
+      const CW = clamp(Math.max(ctx.measureText(desc).width, ctx.measureText(host).width) + 26, 160, 240);
+      const cands = [
+        [p.sx + GAP, p.sy - CH / 2, "r"], [p.sx - GAP - CW, p.sy - CH / 2, "l"],
+        [p.sx + GAP, p.sy - CH - GAP / 2, "r"], [p.sx - GAP - CW, p.sy - CH - GAP / 2, "l"],
+        [p.sx + GAP, p.sy + GAP / 2, "r"], [p.sx - GAP - CW, p.sy + GAP / 2, "l"],
+        [p.sx - CW / 2, p.sy - CH - GAP - 6, "t"], [p.sx - CW / 2, p.sy + GAP + 6, "b"]
+      ];
       let spot = null;
-      for (const [x, y] of cands) {
-        if (x < 4 || y < 50 || x + CW > W - 4 || y + CH > H - 4) continue;
-        if (placed.some((r) => x < r[0] + r[2] && x + CW > r[0] && y < r[1] + r[3] && y + CH > r[1])) continue;
-        if (hitsDot(x, y)) continue;
-        spot = [x, y]; break;
+      for (const [x, y, side] of cands) {
+        if (x < MARGIN || y < TOP || x + CW > W - MARGIN || y + CH > H - MARGIN) continue;
+        if (placed.some((r) => x < r[0] + r[2] + 6 && x + CW + 6 > r[0] && y < r[1] + r[3] + 6 && y + CH + 6 > r[1])) continue;
+        if (hitsDot(x, y, CW, CH)) continue;
+        spot = [x, y, side]; break;
       }
       if (!spot) continue;
-      const [x, y] = spot;
+      const [x, y, side] = spot;
       placed.push([x, y, CW, CH]); n++;
-      ctx.strokeStyle = `hsla(${CLUS[nd.c].h},70%,65%,0.8)`; ctx.lineWidth = 1;
-      ctx.beginPath(); ctx.moveTo(p.sx, p.sy);
-      ctx.lineTo(x < p.sx ? x + CW : x, y + CH / 2); ctx.stroke();
-      ctx.fillStyle = "rgba(9,12,18,.92)";
+      // línea guía desde el punto al borde de la tarjeta
+      const ex = side === "l" ? x + CW : side === "r" ? x : clamp(p.sx, x, x + CW);
+      const ey = side === "t" || side === "b" ? (side === "t" ? y + CH : y) : y + CH / 2;
+      ctx.strokeStyle = `hsla(${col},70%,68%,0.7)`; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(p.sx, p.sy); ctx.lineTo(ex, ey); ctx.stroke();
+      // tarjeta
+      ctx.fillStyle = "rgba(9,12,18,.94)";
       ctx.beginPath();
       if (ctx.roundRect) ctx.roundRect(x, y, CW, CH, 8); else ctx.rect(x, y, CW, CH);
       ctx.fill();
-      ctx.strokeStyle = `hsla(${CLUS[nd.c].h},65%,60%,0.55)`; ctx.stroke();
+      ctx.strokeStyle = `hsla(${col},65%,60%,0.5)`; ctx.stroke();
+      ctx.fillStyle = `hsl(${col},60%,58%)`;
+      ctx.fillRect(x + 1, y + 8, 3, CH - 16);
       ctx.font = "600 12px system-ui,sans-serif";
       ctx.fillStyle = "#e6edf6";
-      ctx.fillText(nd.t.slice(0, 30), x + 9, y + 16);
+      ctx.fillText(title, x + 12, y + 18);
       ctx.font = "10px system-ui,sans-serif";
-      ctx.fillStyle = `hsl(${CLUS[nd.c].h},70%,72%)`;
-      ctx.fillText(nd.h.slice(0, 34), x + 9, y + 30);
-      ctx.fillStyle = "rgba(200,210,224,.8)";
-      ctx.fillText(nd.d.slice(0, 40), x + 9, y + 45);
+      ctx.fillStyle = `hsl(${col},70%,72%)`;
+      ctx.fillText(host, x + 12, y + 32);
+      ctx.fillStyle = "rgba(200,210,224,.82)";
+      ctx.fillText(desc, x + 12, y + 45);
     }
     ctx.restore();
   }
@@ -341,7 +363,8 @@
     if (tween()) dirty = true;
     const key = view.x.toFixed(2) + "|" + view.y.toFixed(2) + "|" + view.k.toFixed(5);
     if (key !== lastView) { lastView = key; updateHover(); dirty = true; }
-    if (dirty) draw();
+    try { if (dirty) draw(); }
+    catch (err) { console.error("render:", err); }   // un fallo de dibujo no detiene el bucle
     requestAnimationFrame(loop);
   }
 
