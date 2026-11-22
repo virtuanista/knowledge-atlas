@@ -1,0 +1,239 @@
+Shubhamsaboo/awesome-llm-apps	145323	apache-2.0	100+ AI Agents, Agent Skills and RAG Apps - Free and Open Source.
+josephmisiti/awesome-machine-learning	74876	other	A curated list of awesome Machine Learning frameworks, libraries and software.
+e2b-dev/awesome-ai-agents	31018	other	A list of AI autonomous agents
+aishwaryanr/awesome-generative-ai-guide	30365	mit	A one stop repository for generative AI research updates, interview resources, notebooks and much more!
+ChristosChristofidis/awesome-deep-learning	29216	-	A curated list of awesome Deep Learning tutorials, projects and communities.
+Hannibal046/Awesome-LLM	27516	cc0-1.0	Awesome-LLM: a curated list of Large Language Model
+terryum/awesome-deep-learning-papers	26210	-	The most cited deep learning papers
+lukasmasuch/best-of-ml-python	23877	cc-by-sa-4.0	🏆 A ranked list of awesome machine learning Python libraries. Updated weekly.
+steven2358/awesome-generative-ai	12852	cc0-1.0	A curated list of modern Generative Artificial Intelligence projects and services
+ai-collection/ai-collection	9288	mit	The Generative AI Landscape - A Collection of Awesome Generative AI Applications
+WangRongsheng/awesome-LLM-resources	9099	apache-2.0	🧑‍🚀 全世界最好的LLM资料总结（多模态生成、Agent、辅助编程、AI审稿、数据处理、模型训练、模型推理、o1 模型、MCP、小语言模型、视觉语言模型） | Summary of the world's best LLM resources. 
+hijkzzz/Awesome-LLM-Strawberry	6897	apache-2.0	A collection of LLM papers, blogs, and projects, with a focus on OpenAI o1 🍓 and reasoning techniques.
+georgezouq/awesome-ai-in-finance	6781	cc0-1.0	🔬 A curated list of awesome LLMs & deep learning strategies & tools in financial market.
+src-d/awesome-machine-learning-on-source-code	6678	cc-by-sa-4.0	Cool links & research papers related to Machine Learning applied to source code (MLonCode)
+mahseema/awesome-ai-tools	6614	mit	A curated list of Artificial Intelligence Top Tools
+wgwang/awesome-LLMs-In-China	6485	apache-2.0	中国大模型
+ikaijua/Awesome-AITools	6372	cc-by-4.0	This repo collects awesome AI tools. Welcome everyone to recommend more awesome AI tools together!
+tensorchord/Awesome-LLMOps	5979	cc0-1.0	An awesome & curated list of best LLMOps tools for developers
+xlite-dev/Awesome-LLM-Inference	5564	gpl-3.0	📚A curated list of Awesome LLM/VLM Inference Papers with Codes: Flash-Attention, Paged-Attention, WINT8/4, Parallelism, etc.🎉
+jobbole/awesome-machine-learning-cn	4519	-	机器学习资源大全中文版，包括机器学习领域的框架、库以及软件
+GT-RIPL/Awesome-LLM-Robotics	4502	bsd-3-clause	A comprehensive list of papers using large language/multi-modal models for Robotics/RL, including papers, codes, and related websites
+jphall663/awesome-machine-learning-interpretability	4088	cc0-1.0	A curated list of awesome responsible machine learning resources.
+atfortes/Awesome-LLM-Reasoning	3713	mit	From Chain-of-Thought prompting to OpenAI o1 and DeepSeek-R1 🍓
+PaddlePaddle/awesome-DeepLearning	3671	apache-2.0	深度学习入门课、资深课、特色课、学术案例、产业实践案例、深度学习知识百科及面试题库The course, case and knowledge of Deep Learning and AI
+filipecalegario/awesome-generative-ai	3575	cc0-1.0	A curated list of Generative AI tools, works, models, and references
+yoloytang/Awesome-LLMs-for-Video-Understanding	3310	-	🔥🔥🔥 [IEEE TCSVT] Latest Papers, Codes and Datasets on Vid-LLMs.
+ybayle/awesome-deep-learning-music	3005	mit	List of articles related to deep learning applied to music
+slavakurilyak/awesome-ai-agents	2951	mit	Awesome list of 300+ agentic AI resources
+guyulongcs/Awesome-Deep-Learning-Papers-for-Search-Recommendation-Advertising	2636	-	Awesome Deep Learning papers for industrial Search, Recommendation and Advertisement. They focus on Embedding, Matching, Pre-Ranking, Ranking, Post Ranking, Relevance, LLM and RL. Please cite our paper "Deep Learning to Rank in Industrial Search Engines, Recommender Systems, and Online Advertising - An Overview and New Perspectives" (TOIS 2026).
+RManLuo/Awesome-LLM-KG	2618	-	Awesome papers about unifying LLMs and KGs
+mbzuai-oryx/Awesome-LLM-Post-training	2589	-	Awesome Reasoning LLM Tutorial/Survey/Guide
+Jason2Brownlee/awesome-llm-books	2469	-	Awesome LLM Books: Curated list of books on Large Language Models
+ActiveVisionLab/Awesome-LLM-3D	2284	mit	Awesome-LLM-3D: a curated list of Multi-modal Large Language Model in 3D world  Resources
+hyp1231/awesome-llm-powered-agent	2259	mit	Awesome things about LLM-powered agents. Papers / Repos / Blogs / ...
+Xnhyacinth/Awesome-LLM-Long-Context-Modeling	2191	mit	📰 Must-read papers and blogs on LLM based Long Context Modeling 🔥
+Thinklab-SJTU/awesome-ml4co	2176	-	Awesome machine learning for combinatorial optimization papers.
+imaurer/awesome-llm-json	2171	mit	Resource list for generating JSON using LLMs via function calling, tools, CFG. Libraries, Models, Notebooks, etc.
+ai4s-research/awesome-ai-for-science	2111	mit	A curated list of awesome AI tools, libraries, papers, datasets, and frameworks that accelerate scientific discovery — from physics and chemistry to biology, materials, and beyond.
+CryptoAILab/Awesome-LM-SSP	2106	apache-2.0	A reading list for large models safety, security, and privacy (including Awesome LLM Security, Safety, etc.).
+caramaschiHG/awesome-ai-agents-2026	2090	other	🤖 The most comprehensive list of AI agents, frameworks & tools in 2026. 300+ resources · 20+ categories · Updated monthly.
+jim-schwoebel/awesome_ai_agents	2030	apache-2.0	🤖 A comprehensive list of 1,500+ resources and tools related to AI agents.
+gokceneraslan/awesome-deepbio	1996	-	A curated list of awesome deep learning applications in the field of computational biology
+ydyjya/Awesome-LLM-Safety	1921	-	A curated list of safety-related papers, articles, and resources focused on Large Language Models (LLMs). This repository aims to provide researchers, practitioners, and enthusiasts with insights into the safety implications, challenges, and advancements surrounding these powerful models. 
+Thinklab-SJTU/Awesome-LLM4AD	1907	apache-2.0	A curated list of awesome LLM/VLM/VLA/World Model for Autonomous Driving(LLM4AD) resources (continually updated)
+HuangOwen/Awesome-LLM-Compression	1899	mit	Awesome LLM compression research papers and tools.
+Prat011/awesome-llm-skills	1874	-	A curated list of awesome LLM and AI Agent Skills, resources and tools for customising AI Agent workflows - that works with Claude Code, Codex, Gemini CLI and your custom AI Agents
+guillaume-chevalier/Awesome-Deep-Learning-Resources	1821	cc0-1.0	Rough list of my favorite deep learning resources, useful for revisiting topics or for reference. I have got through all of the content listed there, carefully. - Guillaume Chevalier
+tmylla/Awesome-LLM4Cybersecurity	1793	-	An overview of LLMs for cybersecurity.
+corca-ai/awesome-llm-security	1722	-	A curation of awesome tools, documents and projects about LLM Security.
+zwang4/awesome-machine-learning-in-compilers	1705	cc0-1.0	Must read research papers and links to tools and datasets that are related to using machine learning for compilers and systems optimisation
+lizhe2004/Awesome-LLM-RAG-Application	1662	-	the resources about the application based on LLM with RAG pattern
+JShollaj/awesome-llm-interpretability	1661	-	A curated list of Large Language Model (LLM) Interpretability resources.
+kaushikb11/awesome-llm-agents	1625	cc0-1.0	A curated list of awesome LLM agents frameworks.
+business-science/awesome-generative-ai-data-scientist	1602	-	A curated list of 100+ resources for building and deploying generative AI specifically focusing on helping you become a Generative AI Data Scientist with LLMs
+huhusmang/Awesome-LLMs-for-Vulnerability-Detection	1599	mit	The community's most comprehensive, continuously-updated index of research on Large Language Models for software vulnerability detection — papers across function-level, repository-level, agentic, and smart-contract detection, plus datasets, benchmarks, and surveys.
+CHIANGEL/Awesome-LLM-for-RecSys	1567	mit	Survey: A collection of AWESOME papers and resources on the large language model (LLM) related recommender system topics.
+Danielskry/Awesome-RAG	1430	cc0-1.0	😎 Awesome list of Retrieval-Augmented Generation (RAG) applications in Generative AI.
+brianspiering/awesome-dl4nlp	1311	-	A curated list of awesome Deep Learning (DL) for Natural Language Processing (NLP) resources
+AgenticHealthAI/Awesome-AI-Agents-for-Healthcare	1292	-	Latest Advances on Agentic AI & AI Agents for Healthcare
+Jenqyang/Awesome-AI-Agents	1276	-	A collection of autonomous agents 🤖️ powered by LLM.
+simoninithomas/awesome-ai-tools-for-game-dev	1069	cc0-1.0	A curated list of awesome AI tools for game developers
+maxbogo/awesome-ai-tools-for-ui	1055	-	Curated list of awesome AI tools to build beautiful UI/UX.
+OmicsML/awesome-deep-learning-single-cell-papers	866	apache-2.0	
+ZhiningLiu1998/awesome-machine-learning-resources	854	cc0-1.0	😎 A curated list of awesome lists across all machine learning topics. | 机器学习/深度学习/人工智能一切主题 (学习范式/任务/应用/模型/道德/交叉学科/数据集/框架/教程) 的资源列表汇总。
+rohitg00/awesome-ai-apps	850	apache-2.0	A curated collection of awesome AI Agents and LLM Apps built with multiple tech stacks, showcasing real-world implementations using OpenAI, Gemini, local models, and various AI frameworks.
+onmyway133/awesome-machine-learning	814	mit	🎰 A curated list of machine learning resources, preferably CoreML
+Anil-matcha/awesome-generative-ai-apps	813	mit	50+ open-source generative AI apps you can clone, deploy, and monetize — image generators, video tools, virtual try-ons, AI SaaS templates, and platform integrations. One-click Vercel deploy on every template.
+oneTaken/awesome_deep_learning_interpretability	768	mit	深度学习近年来关于神经网络模型解释性的相关高引用/顶会论文(附带代码)
+vibertthio/awesome-machine-learning-art	721	-	:robot::art::guitar:A curated list of awesome projects, works, people, articles, and resource for creating art (including music) with machine learning. It's machine learning art.
+shliang0603/Awesome-DeepLearning-500FAQ	623	-	深度学习500问，以问答形式对常用的概率知识、线性代数、机器学习、深度学习、计算机视觉等热点问题进行阐述，以帮助自己及有需要的读者。 全书分为18个章节，50余万字。声明：所有内容来自（仅供学习）：https://github.com/scutan90/DeepLearning-500-questions  
+eudk/awesome-ai-tools	615	cc0-1.0	🔴 VERY LARGE AI TOOL LIST! 🔴  Curated list of AI Tools  - Updated 2026
+openbestof/awesome-ai	606	-	A curated list of awesome AI tools, frameworks, api, software and resources.
+italojs/awesome-machine-learning-portugues	565	-	Um plano de estudos para o aprender machine learning em português
+cedrickchee/awesome-ml-model-compression	547	mit	Awesome machine learning model compression research papers, quantization, tools, and learning material.
+e-tornike/best-of-ml-rust	530	cc-by-sa-4.0	🏆 A ranked list of awesome machine learning Rust libraries.
+liunian-Jay/Awesome-RAG	521	-	💡 Awesome RAG: A resource of Retrieval-Augmented Generation (RAG) for LLMs, focusing on the development of technology.
+machinae/awesome-claws	515	mit	A curated list of awesome AI agents inspired by OpenClaw
+DavidZWZ/Awesome-RAG-Reasoning	462	mit	[EMNLP 2025] Awesome RAG Reasoning Resources
+recodehive/machine-learning-repos	459	mit	A curated list of awesome machine learning frameworks, libraries and software (by language). I
+awesome-rag/awesome-rag	459	apache-2.0	Awesome-RAG: Collect typical RAG papers and systems.
+coree/awesome-rag	455	cc0-1.0	A curated list of retrieval-augmented generation (RAG) in large language models
+0voice/awesome-ai-tools	451	-	Curated list of awesome AI tools for developers, content creators and office workers. Free, practical and easy to use.
+gmberton/awesome-machine-learning-startups	448	-	List of startups doing AI & ML
+datascienceid/machine-learning-resources	446	mit	A curated list of awesome machine learning frameworks, libraries, courses, books and many more.
+WenjieDu/Awesome_Imputation	428	bsd-3-clause	Awesome Deep Learning for Time-Series Imputation, including an unmissable paper and tool list about applying neural networks to impute incomplete time series containing NaN missing values/data
+Phylliade/awesome-machine-learning-robotics	383	-	A curated list of resources about Machine Learning for Robotics
+frutik/Awesome-RAG	381	-	
+pingan8787/awesome-ai-tools	373	-	Finding the AI tools you need!
+joypaul162/Shubhamsaboo-awesome-llm-apps	371	apache-2.0	
+tankvn/awesome-ai-tools	353	-	A curated list of 7766 awesome AI tools
+zhengxuJosh/Awesome-RAG-Vision	340	-	Awesome-RAG-Vision: a curated list of advanced retrieval augmented generation (RAG) for Computer Vision
+bat67/awesome-deep-learning-and-machine-learning-questions	332	other	【不定期更新】收集整理的一些网站中（如知乎、Quora、Reddit、Stack Exchange等）与深度学习、机器学习、强化学习、数据科学相关的有价值的问题
+cporter202/awesome-ai-tools	331	-	A hand-picked collection of AI tools for content, automation, e-commerce, web building, voice, and growth.
+toxtli/awesome-machine-learning-jupyter-notebooks-for-colab	326	-	A curated list of Machine Learning and Deep Learning tutorials in Jupyter Notebook format ready to run in Google Colaboratory
+jrieke/awesome-machine-learning-startups-berlin	311	-	🤖 A curated list of machine learning & artificial intelligence startups in Berlin (Germany)
+superlinear-ai/awesome-machine-learning-engineer	302	-	🤓 A curated awesome list of Machine Learning Engineering resources. Feel free to contribute!
+ppingzhang/Awesome-Deep-Learning-Based-Video-Compression	302	-	Paper list: deep learning based video compression
+Yigtwxx/awesome-rag-production	297	cc0-1.0	A curated list of battle-tested tools, frameworks, and best practices for building scalable, production-grade Retrieval-Augmented Generation (RAG) systems.
+lucifertrj/Awesome-RAG	282	gpl-3.0	RAG-VectorDB-Embedings-LlamaIndex-Langchain
+ikespand/awesome-machine-learning-fluid-mechanics	259	mit	Curated list for ML in FM
+Zijian-Ni/awesome-ai-agents-2026	250	mit	🤖 A curated list of AI Agent frameworks, tools, platforms, and resources for 2026 — the year agents went mainstream
+dair-ai/awesome-ML-projects-guide	248	-	A guide to building awesome machine learning projects.
+krishnakumarsekar/awesome-machine-learning-deep-learning-mathematics	233	-	A curated list of mathematics documents ,Concepts, Study Materials , Algorithms and Codes available across the internet for machine learning and deep learning
+foss42/awesome-generative-ai-apis	231	apache-2.0	A curated list of useful Generative AI APIs for developers
+HanXinzi-AI/awesome-python-machine-learning-resources	227	-	a collection of awesome machine learning and deep learning Python libraries&tools. 热门实用机器学习和深入学习Python库和工具的集合
+km1994/AwesomeRAG_paper	214	-	RAG 论文学习
+L706077/DNN-Face-Recognition-Papers	213	-	awesome deep learning papers for face recognition
+YHPeter/Awesome-RAG-Evaluation	201	mit	The official repository for the paper: Evaluation of Retrieval-Augmented Generation: A Survey.
+Poll-The-People/awesome-rag	189	mit	awesome-rag: a collection of awesome thing related to Retrieval-Augmented Generation
+virtualramblas/awesome-deep-learning-4-life-sciences	176	apache-2.0	A collection of resources for Deep Learning in Python for Life Sciences (with focus on biotech and pharma).
+DirectorySurf/awesome-ai-agents-directories	163	mit	A comprehensive list of top best AI agents directories available online
+alxndrkalinin/awesome-deepneuroimage	155	-	A curated list of awesome deep learning applications in the field of neurological image analysis
+alternbits/awesome-ai-agents	152	mit	A curated list of awesome top best AI Agents
+station-10/awesome-marketing-machine-learning	150	mit	A curated list of awesome machine learning libraries for marketing, including media mix models, multi touch attribution, causal inference and more
+fengyang95/Awesome-Deep-Learning-Based-Time-Series-Forecasting	147	-	
+RatulGhosh/awesome-machine-learning	139	apache-2.0	:book: List of some awesome university courses for Machine Learning!  Feel free to contribute!
+smithakolan/awesome-ai-agents	132	apache-2.0	Collection of awesome AI Agents built using Anthropic, Gemini, OpenAI, and opensource models.
+shervinmin/awesome-deep-learning-survey-papers	131	-	In this page, I will provide a list of survey papers on topics related to deep learning and its applications in various fields.
+MikhailKravets/NeuroFlow	121	mit	Awesome deep learning crate
+dimpurr/awesome-acg-machine-learning	120	-	A curated list of awesome machine learning resources related to anime, manga and so on.
+AlexChalakov/awesome-generative-ai-companies	120	cc0-1.0	A curated list of Gеnerative AI companies, sorted by focus area and total fundraised amount.
+Siddharth1India/Awesome-Deep-Learning	120	mit	Deep Learning resources
+aliammari1/awesome-ai-tools	117	cc0-1.0	Curated collection of 100+ AI tools designed to enhance productivity and creativity, featuring live demos and APIs for developers
+YunchaoYang/Machine_Learning_Fluid_Dynamics	116	-	A curated list of awesome Machine Learning projects in Fluid Dynamics
+svilupp/awesome-generative-ai-meets-julia-language	115	cc0-1.0	Comprehensive guide to generative AI projects and resources in Julia.
+aloth/awesome-ai-agents	101	cc0-1.0	A curated list of AI agent frameworks, tools, platforms, research papers, and resources
+taki0112/Awesome-DeepLearning-Study	99	mit	Summary of DeepLearning (Korean and English are included)
+OneDuckyBoy/Awesome-AI-Agents-HUB-for-CrewAI	94	mit	In this repository I will showcase my cool multi agent system projects with Crew AI, and will reference other cool projects on the subject : )
+ChatTeach/Awesome-AI-Agents	92	-	Curated collection of the latest open-source AI agent projects—Weekly updated!
+jalajthanaki/Awesome_Machine_Learning_Solutions	83	-	A curated list of repositories for my book Machine Learning Solutions.
+Hsword/Awesome-Machine-Learning-System-Papers	83	apache-2.0	
+mb-mal/awesome-ai-agents-frameworks	82	-	
+ProjectRecon/awesome-ai-agents-security	81	other	A living map of the AI agent security ecosystem.
+whut2962575697/Awesome-Deep-Learning-of-Remote-Sensing	79	-	Awesome Deep Learning of Remote Sensing
+jiji262/awesome-AIGC-tools	79	-	AIGC information including ChatGPT , GPT-4 and others.
+run-llama/awesome-rag	78	-	
+xueyongfu11/awesome-deep-learning-resource	71	-	个人总结的大模型、Agent、多模态、自然语言处理NLP、计算机视觉CV等方向paper的阅读笔记；收集到或者使用到的一些NLP、CV等领域的优秀开源仓库；其他：如数据集、评测leaderboard等
+TianLin0509/Awesome-Deep-Learning-For-Wireless-Communication	70	-	2018-2019年最新深度学习用于无线通信（物理层）的论文整理，附论文核心思想总结与代码分析。（中文）/ A collection of  latest papers for wireless communication based on Deep Learning (intelligent communication), with some  own understanding and codes analysis. 
+km1994/AwesomeRAG	70	-	
+JMcrafter26/awesome-ai-tools	67	-	A list of AWESOME AI tools on Github
+wuchulan47/awesome-ai-tools	65	-	💡 汇聚全球最具 影响力、创新性 与 落地价值 的开源 AI 工具与项目  🧭 全面覆盖从 模型、框架、智能体、自动化、RAG 系统 到 多模态创作与开发辅助 的核心生态  🚀 致力于为 开发者、科研人员、创业团队与企业 提供清晰的技术图谱与实践参考  🌍 无论你是在构建下一代 AI 产品，还是探索大模型的边界，这里都是你发现灵感的起点
+NipunaRanasinghe/awesome-ai-agents	61	cc0-1.0	A curated list of frameworks, tools, and resources for building and deploying AI agents.
+noworneverev/Awesome-RAG	58	-	Awesome-RAG: a curated list of Retrieval-Augmented Generation
+miaoshuyu/Awesome-DeepLearning-Knowledge	57	-	The awesome deeplearning knowledges that i often meet.
+HuggingAGI/AwesomeRAGPapers	56	-	A curated collection of influential surveys and papers on Retrieval-Augmented Generation (RAG), covering frameworks, evaluations, multi-modal extensions, and domain-specific applications.  
+Salesably/awesome-ai-agents-for-sales	54	-	A curated list of AI agents, tools, and resources transforming B2B sales
+chaosreactor/awesome-generative-ai	54	cc0-1.0	An awesome list of low- and no-code generative AI resources. 
+mensaochun/AwesomeDeepLearning	54	-	My Deep Learning Notes
+L706077/DNN-Dialogue-System-Papers	52	-	awesome deep learning papers for dialog systems
+yanliang3612/Awesome-Generative-AI-for-Material-Discovery	51	mit	The papers and code related to deep generative models for material discovery.
+yokomakes/awesome-ai-tools	49	mit	A curated list of Artificial Intelligence Top Tools
+Burton2000/Awesome-DeepLearning-Tutorials	48	-	Links to useful online tutorials etc. about deep learning
+AI-Tools-Inc/awesome-ai-tools	48	-	A curated list of awesome AI tools to automate your workflows and 10x your output.
+korchasa/awesome-ai-agents	47	cc0-1.0	This curated list focuses on tools and frameworks for building AI agents
+PathOnAIOrg/awesome-ai-agents	45	-	Collection of Materials on AI Agents
+yeyintminthuhtut/awesome-ai-offensive-security	42	cc0-1.0	A curated list of awesome AI agents and tools specifically designed for AI-powered offensive security, as well as tools for attacking AI systems.
+Mrkomiljon/awesome-generative-ai	42	mit	Multimodal generative AI resources : talking heads, STT, TTS, image & video generation, and AI Agent
+jondoescoding/awesome-ai-agents	40	gpl-3.0	A collection of awesome web2 and web3 AI agents and workflows using OpenAI compatible LLMs.
+Deep-Insight-Labs/awesome-ai-agents	38	mit	A directory of practical and usable AI agents resources from applications and platforms to frameworks and utilities and other parts of the growing ecosystem
+vakra-dev/awesome-ai-agents	37	mit	Production-ready AI agent examples you can clone and run in 5 minutes.
+ka-pi-ba-la/awesome-ai-tools	37	other	好用好玩的AI工具导航站，手工筛选，持续更新
+ToolkitlyAI/awesome-ai-tools	36	mit	A curated, ever-growing collection of AI tools for productivity, creativity, and innovation. Browse by category, discover what fits your workflow, and contribute your own finds via pull request. Explore more at Toolkitly.com.
+bergside/awesome-eve-agents	35	mit	Awesome AI agents based on Eve
+QAInsights/awesome-ai-tools	35	-	A curated, categorized reference of AI-powered coding tools. Covers full IDEs, editor extensions, terminal agents, autonomous agents, browser-based builders, and code review platforms.
+natnew/Awesome-Generative-AI	33	mit	A repository dedicated to showcasing and exploring the fascinating world of generative artificial intelligence. 🌟 Star if you like it!
+XiaomingX/awesome-ai-tools-for-game-dev	32	apache-2.0	Awesome AI Tools for Game Development: A curated collection of the best AI tools, libraries, and resources to enhance game development workflows. From procedural content generation to NPC behavior, this repository gathers state-of-the-art AI solutions for game developers.
+aiagenta2z/HealthcareAgent	31	-	List of Awesome AI Agent for Healthcare and Common Agentic AI API Interface
+AIM-Research-Lab/Awesome-AI-Agents-Medicine	30	-	
+SAIFS-AIHub/Awesome-AI-Agents-Live	30	mit	A lightweight, continuously-updated catalog of research papers on AI agents.
+simonMadec/awesome-phenotyping-deep-learning	30	-	awesome deep learning for field phenotyping
+Correia-jpv/fucking-awesome-ai-tools	29	mit	A curated list of Artificial Intelligence Top Tools. With repository stars⭐ and forks🍴
+nanogiants/awesome-ai-tools	29	mit	A curated list of AI-powered tools
+buntys2010/awesome-ai-agents	28	mit	🤖 A curated list of top open-source AI agent frameworks — from AutoGPT to LangChain, featuring 60+ production-ready frameworks with 1M+ stars
+sajadh76/awesome-AI-tools	27	mit	🚀 A curated list of 110+ AI tools for writing, coding, research, design, video, voice & AI agents. Updated every week.
+Staok/Awesome-AI-Tools	27	-	一个集合了各个AI工具集合的集合
+TulioPSilva/https-github.com-Shubhamsaboo-awesome-llm-apps	25	-	https://github.com/Shubhamsaboo/awesome-llm-apps.git
+Rvelamen/Awesome-AI-Tools	20	mit	🚀 AI Tools Universe: 1000+ AI tools, 24 categories ✨ For developers | ✅ Standardized | 🔍 Searchable
+submitaitools/awesome-other-ai-tools	20	-	A curated list of awesome AI tools across various niches, including NSFW tools, large language models, Web3 innovations, AI newsletters, and more.
+TonyChen56/Awesome-AI-Tools	19	-	Collection of AI-related utilities. Welcome to submit issues and pull requests /收藏AI相关的实用工具，欢迎提交issues 或者pull requests
+LinuxSuRen/awesome-ai	18	apache-2.0	Collect all kinds of awesome AI tools
+dipakkr/awesome-ai-tools	18	-	
+ethan-funny/awesome-rag	18	-	一个关于检索增强生成（RAG）前沿论文、教程和应用实践的精选集合。为对 RAG 最新进展和最佳实践感兴趣的研究人员、开发人员和从业者提供较为全面的资源。
+pageman/Master-Generative-AI	16	-	Study plan app based from https://github.com/aishwaryanr/awesome-generative-ai-guide
+SJTU-DMTai/awesome-rag	15	-	
+BuildSchool/awesome-llm-apps	10	apache-2.0	
+brandonopened/phiagent	10	-	Phi Agent exploration from Shubham Saboo's repo https://github.com/Shubhamsaboo/awesome-llm-apps
+lcy5201314/Awesome-RAG-Safety	10	-	Awesome-RAG-Safety 
+jasonwcfan/awesome-rag	10	mit	A repository of awesome open source projects to set up your own AI powered knowledge base
+TreeAI-Lab/Awesome-RAG-Security	10	-	
+awelist/awesome-generative-ai	9	-	A curated list of tools, models, datasets, papers, and resources related to generative artificial intelligence.
+PubliusAu/awesome-generative-ai-research-papers	8	-	A curated list of papers at the cutting edge of generative AI
+flosrv/Awesome-LLM-Apps-Shubham-Saboo	8	apache-2.0	
+hbana/awesome-llm-apps	8	apache-2.0	
+donvito/awesome-generative-ai	7	-	Generative AI tools and documentation which you can find useful for learning, exploring, and experimenting.
+jiangnanboy/awesome-llm-apps-chinese	7	apache-2.0	awesome-llm-apps-chinsese
+isaccanedo/awesome-llm-apps	7	apache-2.0	:star: Collection of awesome LLM apps with AI Agents and RAG using OpenAI, Anthropic, Gemini and opensource models
+deciding/awesome-rag	7	-	A curated list of LLM aided with Retrieval Augmented Generation (RAG)
+usama-shiranai90/Awesome-RAG-Medical	7	mit	Welcome to the RAG Medical Repository, a curated collection of resources, datasets, review papers, research papers, tools, and tutorials focused on Retrieval-Augmented Generation (RAG) applications in the medical field.
+Binarycodert/Awesome-Generative-AI-Guide	6	mit	awesome-generative-ai-guide
+tshekerli/awesome-llm-apps	6	apache-2.0	A curated collection of **Awesome LLM apps built with RAG, AI Agents, Multi-agent Teams, MCP, Voice Agents, and more.** This repository features LLM apps that use models from OpenAI, Anthropic, Google, and open-source models like DeepSeek, Qwen or Llama that you can run locally on your computer.
+HemachandranD/awesome_llm_apps	6	-	
+imrobintomar/AgentVerse	6	apache-2.0	Collection of awesome LLM apps with AI Agents and RAG using OpenAI, Anthropic, Gemini and opensource models.
+hasura/awesome-RAG-tools	6	-	A community curated list of awesome tools that let you do RAG (Retrieval Augmented Generation) in your AI application.
+Awesome-llms-labs/awesome-rag	6	mit	Awesome list of retrieval-augmented generation (RAG) resources: frameworks, vector databases, embeddings, chunking, reranking, advanced patterns, evaluation, papers — with machine-readable data.
+yaoweihu/Awesome-RAG	6	-	Summary of RAG Resources
+Sjay-Wang/Awesome-RAG-Recommendation	6	-	Awesome Papers About RAG for Recommendations
+Joker-ZXR/Awesome-Generative-AI-in-Medical-Imaging	5	other	A curated collection of datasets, methods, and resources for Generative AI in Medical Imaging
+nluninja/awesome-rag-study	5	cc0-1.0	A curated collection of papers, frameworks, tools, and resources on Retrieval-Augmented Generation (RAG).  Maintained for students of the Text Mining and Data Visualization course as a starting point for thesis research.
+sincehelloworld/awesome-generative-ai-guide	4	mit	
+bikrambajaj/aishwaryanr-awesome-generative-ai-guide	4	mit	
+eradriver9312/awesome-llm-apps	4	apache-2.0	
+Mezee/n8n_templates	4	mit	Collection of awesome LLM apps with AI Agents and RAG using OpenAI, Anthropic, Gemini and opensource models.
+awelist/awesome-rag	4	-	A curated list of tools, frameworks, and resources for Retrieval-Augmented Generation (RAG).
+MostAwesomeProjects/AwesomeRAGProject	4	-	一个基于《中华人民共和国刑法》的知识库检索助手
+shumatsuaibu/awesome-generative-ai-youtube	3	other	生成AI系YouTubeチャンネルまとめ – Maintained by 週末AI部
+gunjanjaswal/Awesome-Generative-AI-Prompts	3	mit	A curated, self-updating collection of effective prompts for various generative AI models and clients. This repository automatically updates daily to include the latest and most effective prompts from across the AI ecosystem.
+awesome-generative-ai/awesome-generative-ai	2	-	Config files for my GitHub profile.
+eleffa/awesome-generative-ai	2	cc0-1.0	
+abhinavpy/Awesome-Generative-AI-Papers-List	2	mit	Welcome to the 🤖 Generative AI 🤖 Papers Repository! This repository is dedicated to compiling and sharing research papers that are trending ✨/ impactful 💥in the domain of Generative AI. This compilation in part motivated by the course CSE 598: Topics in Generative AI by Dr. Yezhou Yang, Arizona State University.
+anybodycanprompt/Awesome-Generative-AI-Research-	2	apache-2.0	
+codex-raj/awesome-generative-ai-guide	2	mit	
+agrianwahab/Shubhamsaboo-awesome-llm-apps	2	-	
+Antim21/AI-Meeting-Summarizer	2	-	Collection of awesome LLM apps with AI Agents and RAG using OpenAI, Gemini and opensource models.
+ayyazzafar/needle-jev	2	apache-2.0	Semantic find-in-page using TypeSafe Jev with your own API key. Modified from Needle in Shubhamsaboo/awesome-llm-apps (Apache-2.0).
+Hanzawa-1/Awesome-Generative-AI-for-Game-and-Anime-Production	1	other	A curated, self-updating catalog of generative-AI / ML tasks for game and anime production — published as a bilingual (EN / 日本語) website.
+tjboudreaux/awesome-generative-ai	1	-	A repo to automatically scrape awesome generative ai links from Twitter written by ChatGPT
+mshivabalaji/awesome-llm-apps	1	apache-2.0	
+abdullahferozonline/awesome-llm-apps-backup	1	apache-2.0	Backup of awesome-llm-apps
+sharkmabin/awesome-llm-apps	1	apache-2.0	Agent 教程
+djshababkhan/awesome-llm-apps	1	apache-2.0	100+ AI Agents, Agent Skills and RAG Apps - Free and Open Source.
+lllray/awesome-llm-apps	1	-	
+machaniG/awesome-llm-apps	1	apache-2.0	100+ AI Agents, Agent Skills and RAG Apps - Free and Open Source.
+Joe-codebase/awesome-llm-apps	1	mit	Collection of awesome LLM apps with AI Agents and RAG using OpenAI, Anthropic, Gemini and opensource models.
+player29879/awesome-llm-apps	1	cc0-1.0	Collection of awesome LLM apps with RAG using OpenAI, Anthropic, Gemini and opensource models.
+cano1362/Awesome_llm_apps	1	apache-2.0	
+jeromecloudstrategix/awesome-llm-apps	1	apache-2.0	
+YS6578/awesome-llm-apps	1	-	
+jyotisinha0526/awesome-llm-apps	1	apache-2.0	Collection of awesome LLM apps with AI Agents and RAG using OpenAI, Anthropic, Gemini and opensource models.
+Wooddweller/awesome-llm-apps	1	apache-2.0	Collection of awesome LLM apps with AI Agents and RAG using OpenAI, Anthropic, Gemini and opensource models. Primarily built around business use-cases and solving solving real‑world problems with AI.

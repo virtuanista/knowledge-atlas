@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Knowledge Atlas · grafos fractales de fuentes técnicas</title>
+<meta name="description" content="Knowledge Atlas: grafos fractales de fuentes técnicas (IA y LLM, algoritmos, estándares web, datasets abiertos, juegos), deduplicadas, clusterizadas y navegables con previews.">
+<meta name="keywords" content="awesome, fuentes técnicas, IA, LLM, algoritmos, estándares web, datasets abiertos, juegos, grafo fractal, clusters">
+<meta name="author" content="virtuanista">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta name="theme-color" content="#07090d">
+<meta name="color-scheme" content="dark">
+<link rel="canonical" href="https://virtuanista.github.io/knowledge-atlas/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Knowledge Atlas">
+<meta property="og:locale" content="es_ES">
+<meta property="og:title" content="Knowledge Atlas · grafos fractales de fuentes técnicas">
+<meta property="og:description" content="Fuentes técnicas deduplicadas, clusterizadas y navegables en grafos fractales con previews.">
+<meta property="og:url" content="https://virtuanista.github.io/knowledge-atlas/">
+<meta property="og:image" content="https://virtuanista.github.io/knowledge-atlas/og.png">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Grafo fractal de fuentes técnicas con previews">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Knowledge Atlas · grafos fractales de fuentes técnicas">
+<meta name="twitter:description" content="Fuentes técnicas deduplicadas, clusterizadas y navegables en grafos fractales.">
+<meta name="twitter:image" content="https://virtuanista.github.io/knowledge-atlas/og.png">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%2307090d'/%3E%3Ccircle cx='16' cy='16' r='6' fill='%2366ffd1' filter='blur(1px)'/%3E%3Ccircle cx='9' cy='10' r='3' fill='%2368a8ff'/%3E%3Ccircle cx='23' cy='22' r='3' fill='%23ff8fd0'/%3E%3C/svg%3E">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://virtuanista.github.io/knowledge-atlas/#website",
+      "url": "https://virtuanista.github.io/knowledge-atlas/",
+      "name": "Knowledge Atlas",
+      "inLanguage": "es",
+      "description": "Grafos fractales de fuentes técnicas agrupadas por clusters."
+    },
+    {
+      "@type": "Dataset",
+      "@id": "https://virtuanista.github.io/knowledge-atlas/#dataset",
+      "name": "Knowledge Atlas · índices de fuentes",
+      "description": "Fuentes técnicas deduplicadas y clusterizadas por tema, extraídas de listas públicas awesome.",
+      "url": "https://virtuanista.github.io/knowledge-atlas/data/index.json",
+      "encodingFormat": "application/json",
+      "creator": {"@type": "Person", "name": "virtuanista"},
+      "keywords": ["fuentes", "IA", "LLM", "algoritmos", "estándares web", "datasets", "juegos", "clusters"],
+      "isAccessibleForFree": true
+    }
+  ]
+}
+</script>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="bar">
+  <div class="brand"><span class="dot"></span><h1>Knowledge Atlas</h1></div>
+  <select id="topic" aria-label="Grafo"></select>
+  <input id="q" type="search" placeholder="buscar  ( / )" aria-label="Buscar fuentes" autocomplete="off">
+  <div class="stats" id="stats" aria-live="polite"></div>
+  <button id="dof" type="button" aria-pressed="true" title="Profundidad de campo (D)">DOF</button>
+  <button id="reset" type="button" title="Restablecer vista">⟲</button>
+</header>
+<aside class="legend" id="legend" aria-label="Clusters"></aside>
+<main class="stage">
+  <canvas id="c" role="img" aria-label="Grafo fractal de fuentes técnicas"></canvas>
+  <div id="card" class="card" role="dialog" aria-live="polite" hidden></div>
+  <noscript><p class="ns">Esta página necesita JavaScript para dibujar el grafo.</p></noscript>
+</main>
+<script src="app.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,80 @@
+awesomedata/awesome-public-datasets	80242	mit	A topic-centric list of HQ open datasets.
+gunnarmorling/awesome-opensource-data-engineering	3311	other	An Awesome List of Open-Source Data Engineering Projects
+youngguncho/awesome-slam-datasets	1951	-	A curated list of awesome datasets for SLAM
+niessner/Matterport	1271	mit	Matterport3D is a pretty awesome dataset for RGB-D machine learning tasks :)
+jsbroks/awesome-dataset-tools	946	mit	🔧 A curated list of awesome dataset tools
+Renumics/awesome-open-data-centric-ai	739	cc-by-4.0	Curated list of open source tooling for data-centric AI on unstructured data. 
+zenml-io/awesome-open-data-annotation	736	mit	Open Source Data Annotation & Labeling Tools
+awesomedata/apd-core	419	gpl-3.0	Core meta for awesome-public-datasets. Contribute new data here!
+ahammadmejbah/Awesome-Datasets-Hub	150	-	A curated collection of datasets for Large Language Models (LLMs), covering medical AI, NLP, multimodal learning, instruction tuning, reasoning, code generation, and evaluation benchmarks.
+smuthubabu/awesome-public-datasets	135	mit	https://github.com/smuthubabu/awesome-public-datasets/blob/master/README.rst
+open-data-agent-platform/awesome-odap	105	other	Awesome Open Data Agent Platform resources: open data access, semantic layers, multi-agent SQL, memory, governance, and GenBI.
+mainlp/awesome-human-label-variation	104	-	A curated list of awesome datasets with human label variation (un-aggregated labels) in Natural Language Processing and Computer Vision, accompanying The 'Problem' of Human Label Variation: On Ground Truth in Data, Modeling and Evaluation (EMNLP 2022)
+viisar/awesome-datasets	97	-	A curated list of awesome datasets for papers/experiments/validation.
+KID-22/Awesome-Music-Recommendation-Datasets	93	-	Awesome Datasets for Music Recommendation
+andrewcstewart/awesome-democracy-data	89	cc0-1.0	A curated list of awesome data sources related to elections, electoral reforms, and democratic political systems.
+Mxoder/Maxs-Awesome-Datasets	77	gpl-3.0	Max的有趣数据集 / Max's awesome datasets
+banglanlp/bnlp-resources	72	-	Awesome datasets for Bangla language computing. 
+csmsx/awesome-indoor-farming	64	-	A curated list of awesome dataset, technologies, companies, and media about Indoor Farming.
+datasets/core-datasets	59	-	DataHub.io awesome datasets - curated collections of high quality dataset organized by topic
+033labcodes/awesome-hyperspectral-datasets	58	-	Awesome datasets for hyperspectral imaging research.
+kili-technology/awesome-datasets	39	-	A comprehensive list of annotated training datasets classified by use case.
+magichub-opensource/Magichub-Awesome-Datasets-and-Competitions	37	-	Audio and Text Corpus for Machine Learning, published by MagicHub(An open source community of Magic Data Tech)
+NajiElKotob/Awesome-Datasets	34	mit	
+bean-zhang/awesome-datasets-about-datacenter	32	mit	An awesome list of open datasets about datacenter in public domains (on-going).
+buren/awesome-sweden-datasets	31	other	A curated list of awesome datasets to use when coding for the Swedish market.
+OpenDataCo/awesome-datasets-colombia	29	-	Lista de enlaces a datasets relacionados con Colombia
+okhosting/awesome-open-data	29	mit	List of free and open datasets for machine learning, arranged by topic
+esborisova/Awesome-Table-Understanding-Datasets	21	mit	Curated list of awesome datasets for various table understanding tasks
+MattTriano/Public_Dataset_Sources	15	mit	An offshoot of the Awesome-Public-Datasets repo I'm cultivating
+antonlevashov/awesome-public-datasets	15	-	taken from https://github.com/caesar0301/awesome-public-datasets
+awelist/awesome-open-data	13	-	A curated list of high-quality open data resources, tools, platforms, and projects across domains.
+obrunet/awesome-public-datasets	9	mit	a curated list of site and links to find open data sets
+oliverDOTnet/Awesome-Hackathon	7	apache-2.0	Collection of awesome Datasets and APIs - happy hacking!
+bwi45/Awesome-Public-Datasets	6	-	:books: This repository provides public datasets of developing county and human in Indonesia.
+Graviti-AI/datasets	6	mit	Discover and share awesome datasets and work together to push the boundaries of AI further.
+umerhaddii/Awesome-Datasets	5	-	Awesome datasets for Data Practitioners 
+Rafaelmdcarneiro/LLMDataHub	5	mit	Awesome Datasets for LLM Training.
+CodeandoMexico/awesome-open-data	5	mit	Una lista curada de recursos para estrategia, gobernanza y apertura de datos.
+urre/searchable-awesome-public-datasets	4	mit	Blazing fast search a list of a topic-centric public data sources in high quality
+Danlobaton/awesome-datasets	4	-	🐨 A collection of awesome open datasets for your next project/product
+XiaomingX/awesome-datasets	4	-	国内外可用于大模型(LLM)与生成式AI训练的数据集下载站点汇总：文生文/文生图/文生视频
+anagamino/Network-security-datasets	4	mit	A comprehensive list of websites providing awesome datasets for research/practical network security
+mhumayunsaeed/Awesome-Open-Data-APIs	4	-	A curated collection of free and open APIs for developers, organized by category with community contributions.
+AI-Engineer-Sammar/Data_sets-for-ai-and-ml-projects	3	mit	ℹ️ Explore GitHub for top-tier AI and ML datasets! 🚀 Discover curated repositories like Awesome Public Datasets or GitHub Marketplace data. 📊 Perfect for training, benchmarking, and building open-source projects. 🤖 Access raw code and clean data files directly. 💻 Start coding your next model today! ✨
+connu/awesome-datasets	3	cc0-1.0	Curated public data (all countries) for software teams, with license, size and access terms recorded for every entry.
+NY1024/Awesome-Datasets-for-Cybersecurity	3	-	
+dinhtuyen/awesome-public-datasets	2	mit	
+msarker000/home-work-4-problem-3	2	-	Find a data set from awesome public datasets which interests you. The data set must have at least 30 rows, and 8 or more attributes (columns). At least 5 of the attributes must be numerical as opposed to categorical (labels). Read through "https://www.itl.nist.gov/div898/handbook/eda/eda.htm". Produce a jupyter notebooks (which you will submit here) which does a throughout EDA.   You should have 1 dimensional histograms of each variable of the data. If the data is categorical they will be bar charts. In the accompanied text, report on max, min, mean, median, and outliers. Put all the variables together with a single box plot so we can see them side by side (in addion to the individual histograms).   Next show the pair-wise relationships with a matrix of scatter plots for the numerical data only. How would you show the catagorical vs categorical data? Aggregate one varaible vs another. How would you show the relationship between categorical and numerical data (color).
+DerekKane/awesome-public-datasets	1	mit	
+Tintin-dataObsessed/awesome-African-public-datasets	1	mit	A rendition of the Awesome public datasets library but for African data. 
+PrityKarn/https-github.com-awesomedata-awesome-public-datasets	1	-	
+FANTASMACODER/awesome-datasets-brasil	1	other	Curadoria de datasets oficiais brasileiros por tema, prontos para ciencia de dados, IA e machine learning
+hiyeshin/dataset	1	-	awesome dataset
+BGrasnick/Awesome-Open-Data	1	-	Open data project for the university
+gapskris/awesome-opensource-data-engineering	1	other	
+dowast92/awesome-public-datasets	0	-	awesome-public-datasets
+LNIEDERLANDER/AwesomeDatasets	0	-	Clone Awesome Public Dataset
+vishvacyber/awesome-public-datasets	0	mit	
+Leungy/awesome-public-datasets	0	mit	
+CFA-Fintech/Awesome-Public-Datasets	0	mit	A topic-centric list of HQ open datasets.
+linxi159/awesome-public-datasets_	0	mit	
+ditnux70/awesome-public-datasets	0	mit	
+YvMohsin/awesome-public-datasets	0	mit	A topic-centric list of high-quality open datasets in public domains. Propose NEW data ☛☛☛PR☛☛☛
+tanvisahay31/awesome-public-datasets	0	mit	
+crazycloud/awesome-public-datasets	0	-	
+AjibolaOladoke/awesome-public-datasets	0	mit	A topic-centric list of HQ open datasets. | Swift Tech Co. | https://www.swifttechco.com | https://t.me/+Qt_eFvkb2rliMzNh
+gabrielmacedoanac/awesome-public-datasets	0	mit	
+RKDSOne/Awesome-Public-Datasets	0	mit	
+shrau3003-lang/awesome-public-datasets	0	-	
+fu4303/awesome-public-datasets	0	mit	
+JahelHarrison/awesome-public-datasets	0	-	
+swing99527/awesome-open-datasets	0	other	🐟 A curated list of 200+ high-quality, downloadable open datasets across 15 domains for ML/AI/Data Science
+xchehub/awesome-open-data	0	mit	
+ninilich/awesome-opensource-data-engineering	0	other	
+mem15381/awesome-opensource-data-engineering	0	other	
+RobinLu1209/awesome-open-data-discovery	0	-	All about Open Data Discovery in Big Data Era
+Data-Engr101/awesome-opensource-data-engineering-master	0	-	
+ishandutta2007/Awesome-Open-Data-Catalog-Metadata-Management	0	mit	Top Open Data Catalog Metadata Management (Opensource)  Star if you like it! 
+cottrell/awesome-opendata	0	-	A curated list of awesome Open Data sources, tools and other awesomeness.
+NumanticSolutions/awesome-government-data	0	mit	List of useful and/or interesting datasets, API's and tools relating to government data.
