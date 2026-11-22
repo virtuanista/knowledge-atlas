@@ -280,14 +280,40 @@
       moveCard(lastPt.x, lastPt.y);
     }
   }
-  // recorta texto con elipsis medido en píxeles (nunca corta una palabra a la mitad)
-  function fitText(text, maxW) {
-    if (ctx.measureText(text).width <= maxW) return text;
-    let t = text;
-    while (t.length > 1 && ctx.measureText(t + "…").width > maxW) t = t.slice(0, -1);
-    return t.trimEnd() + "…";
+  // envuelve texto en líneas medidas en píxeles; la última línea lleva elipsis si no cabe
+  function wrapText(text, maxW, maxLines) {
+    const raw = String(text || "").split(/\s+/).filter(Boolean);
+    // palabras más anchas que la caja (p. ej. CJK sin espacios) se trocean por carácter
+    const words = [];
+    for (const w of raw) {
+      if (ctx.measureText(w).width <= maxW) { words.push(w); continue; }
+      let chunk = "";
+      for (const ch of w) {
+        if (ctx.measureText(chunk + ch).width > maxW) { words.push(chunk); chunk = ""; }
+        chunk += ch;
+      }
+      if (chunk) words.push(chunk);
+    }
+    const lines = [];
+    let cur = "";
+    for (const w of words) {
+      const t = cur ? cur + " " + w : w;
+      if (ctx.measureText(t).width <= maxW) { cur = t; continue; }
+      if (cur) lines.push(cur);
+      cur = w;
+      if (lines.length === maxLines) break;
+    }
+    if (cur && lines.length < maxLines) lines.push(cur);
+    if (lines.length > maxLines) lines.length = maxLines;
+    const used = lines.join("").length, total = words.join("").length;
+    if (used < total && lines.length) {
+      let last = lines[lines.length - 1];
+      while (last.length > 1 && ctx.measureText(last + "…").width > maxW) last = last.slice(0, -1);
+      lines[lines.length - 1] = last.trimEnd() + "…";
+    }
+    return lines;
   }
-  // previews en canvas: tarjeta por punto, a distancia del punto, sin tapar otros puntos ni otras tarjetas
+  // previews: tarjeta CUADRADA por punto, colocada a distancia del punto, sin tapar otros puntos ni tarjetas
   function drawPreviews(pv, vis, fi) {
     const cx = W / 2, cy = H / 2;
     const cand = vis.filter((i) => i !== fi && !hidden.has(NODES[i].c));
@@ -304,58 +330,63 @@
       const nx = clamp(dx, x, x + w), ny = clamp(dy, y, y + h);
       return Math.hypot(dx - nx, dy - ny) < r;
     });
-    const CH = 52, GAP = 18, MAXCARDS = 60, MARGIN = 12, TOP = 52;
+    const S = 176, PAD = 12, GAP = 18, MAXCARDS = 50, MARGIN = 12, TOP = 52;
     const placed = [];
     ctx.save();
+    ctx.textAlign = "left"; ctx.textBaseline = "alphabetic";
     ctx.filter = `blur(${((1 - pv) * 5).toFixed(2)}px)`;
     ctx.globalAlpha = pv;
     let n = 0;
     for (const p of pts) {
       if (n >= MAXCARDS) break;
       const nd = NODES[p.i], col = CLUS[nd.c].h;
+      const inner = S - PAD * 2 - 4;
       ctx.font = "600 12px system-ui,sans-serif";
-      const title = fitText(nd.t, 220);
+      const titleL = wrapText(nd.t, inner, 2);
       ctx.font = "10px system-ui,sans-serif";
-      const host = fitText(nd.h, 220);
-      const desc = fitText(nd.d, 220);
-      const CW = clamp(Math.max(ctx.measureText(desc).width, ctx.measureText(host).width) + 26, 160, 240);
+      const hostL = wrapText(nd.h, inner, 1);
+      const titleH = titleL.length * 15;
+      const descRoom = Math.max(0, Math.floor((S - PAD * 2 - titleH - 16 - 22) / 13));
+      const descL = wrapText(nd.d, inner, descRoom);
       const cands = [
-        [p.sx + GAP, p.sy - CH / 2, "r"], [p.sx - GAP - CW, p.sy - CH / 2, "l"],
-        [p.sx + GAP, p.sy - CH - GAP / 2, "r"], [p.sx - GAP - CW, p.sy - CH - GAP / 2, "l"],
-        [p.sx + GAP, p.sy + GAP / 2, "r"], [p.sx - GAP - CW, p.sy + GAP / 2, "l"],
-        [p.sx - CW / 2, p.sy - CH - GAP - 6, "t"], [p.sx - CW / 2, p.sy + GAP + 6, "b"]
+        [p.sx + GAP, p.sy - S / 2], [p.sx - GAP - S, p.sy - S / 2],
+        [p.sx + GAP, p.sy - S - GAP / 2], [p.sx - GAP - S, p.sy - S - GAP / 2],
+        [p.sx + GAP, p.sy + GAP / 2], [p.sx - GAP - S, p.sy + GAP / 2],
+        [p.sx - S / 2, p.sy - S - GAP], [p.sx - S / 2, p.sy + GAP]
       ];
       let spot = null;
-      for (const [x, y, side] of cands) {
-        if (x < MARGIN || y < TOP || x + CW > W - MARGIN || y + CH > H - MARGIN) continue;
-        if (placed.some((r) => x < r[0] + r[2] + 6 && x + CW + 6 > r[0] && y < r[1] + r[3] + 6 && y + CH + 6 > r[1])) continue;
-        if (hitsDot(x, y, CW, CH)) continue;
-        spot = [x, y, side]; break;
+      for (const [x, y] of cands) {
+        if (x < MARGIN || y < TOP || x + S > W - MARGIN || y + S > H - MARGIN) continue;
+        if (placed.some((r) => x < r[0] + S + 6 && x + S + 6 > r[0] && y < r[1] + S + 6 && y + S + 6 > r[1])) continue;
+        if (hitsDot(x, y, S, S)) continue;
+        spot = [x, y]; break;
       }
       if (!spot) continue;
-      const [x, y, side] = spot;
-      placed.push([x, y, CW, CH]); n++;
-      // línea guía desde el punto al borde de la tarjeta
-      const ex = side === "l" ? x + CW : side === "r" ? x : clamp(p.sx, x, x + CW);
-      const ey = side === "t" || side === "b" ? (side === "t" ? y + CH : y) : y + CH / 2;
+      const [x, y] = spot;
+      placed.push([x, y]); n++;
+      // línea guía desde el punto al borde más cercano de la tarjeta
+      const ex = clamp(p.sx, x, x + S), ey = clamp(p.sy, y, y + S);
+      const onX = ex > x && ex < x + S, onY = ey > y && ey < y + S;
+      const lx = onX ? ex : (p.sx < x ? x : x + S), ly = onY ? ey : (p.sy < y ? y : y + S);
       ctx.strokeStyle = `hsla(${col},70%,68%,0.7)`; ctx.lineWidth = 1;
-      ctx.beginPath(); ctx.moveTo(p.sx, p.sy); ctx.lineTo(ex, ey); ctx.stroke();
-      // tarjeta
-      ctx.fillStyle = "rgba(9,12,18,.94)";
+      ctx.beginPath(); ctx.moveTo(p.sx, p.sy); ctx.lineTo(lx, ly); ctx.stroke();
+      // caja cuadrada
+      ctx.fillStyle = "rgba(9,12,18,.95)";
       ctx.beginPath();
-      if (ctx.roundRect) ctx.roundRect(x, y, CW, CH, 8); else ctx.rect(x, y, CW, CH);
+      if (ctx.roundRect) ctx.roundRect(x, y, S, S, 10); else ctx.rect(x, y, S, S);
       ctx.fill();
-      ctx.strokeStyle = `hsla(${col},65%,60%,0.5)`; ctx.stroke();
+      ctx.strokeStyle = `hsla(${col},65%,60%,0.6)`; ctx.stroke();
       ctx.fillStyle = `hsl(${col},60%,58%)`;
-      ctx.fillRect(x + 1, y + 8, 3, CH - 16);
-      ctx.font = "600 12px system-ui,sans-serif";
-      ctx.fillStyle = "#e6edf6";
-      ctx.fillText(title, x + 12, y + 18);
-      ctx.font = "10px system-ui,sans-serif";
-      ctx.fillStyle = `hsl(${col},70%,72%)`;
-      ctx.fillText(host, x + 12, y + 32);
-      ctx.fillStyle = "rgba(200,210,224,.82)";
-      ctx.fillText(desc, x + 12, y + 45);
+      ctx.fillRect(x + 1, y + 10, 3, S - 20);
+      // contenido
+      let ty = y + PAD + 12;
+      ctx.font = "600 12px system-ui,sans-serif"; ctx.fillStyle = "#e6edf6";
+      for (const line of titleL) { ctx.fillText(line, x + PAD, ty); ty += 15; }
+      ctx.font = "10px system-ui,sans-serif"; ctx.fillStyle = `hsl(${col},70%,72%)`;
+      for (const line of hostL) { ctx.fillText(line, x + PAD, ty + 2); ty += 15; }
+      ctx.fillStyle = "rgba(200,210,224,.85)";
+      ty += 8;
+      for (const line of descL) { ctx.fillText(line, x + PAD, ty); ty += 13; }
     }
     ctx.restore();
   }
