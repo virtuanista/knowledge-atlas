@@ -16,8 +16,17 @@ com www http https org net io app web site info more best list new all one get h
 una para con por que del en y o a un es son al se como sus más mas todo todos entre sobre based also
 """.split())
 TOK = re.compile(r"[a-záéíóúñü0-9]{3,}")
+# contenido fuera de alcance por tema (seguridad ofensiva, CSS/UI, etc.)
+OFF = {"estandares": re.compile(r"blackhat|BH|smuggl|desync|cache.?deception|pentest|hacking|bounty|ctf|xss|ssrf|exploit|malware|cve|vulnerab|attack|payload|waf|hunter|recon", re.I),
+       "algoritmos": re.compile(r"css|frontend|layout|react|vue|angular|tailwind|ui|pentest|hacking|ctf|bounty", re.I),
+       "ia": re.compile(r"css|frontend|hacking|pentest", re.I),
+       "datasets": re.compile(r"pentest|hacking|blackhat|exploit", re.I),
+       "juegos": re.compile(r"pentest|hacking|blackhat|exploit", re.I)}
+def off_topic(s):
+    b = s["best"]; t = s["topic"]
+    return bool(OFF.get(t) and OFF[t].search(" ".join([s["url"], b.get("title", ""), b.get("desc", "")])))
 sel = [s for s in json.load(open(os.path.join(ROOT, "out/selected.json"), encoding="utf-8"))
-       if urlsplit(s["url"]).netloc.replace("www.", "") not in SOCIAL]
+       if urlsplit(s["url"]).netloc.replace("www.", "") not in SOCIAL and not off_topic(s)]
 meta = {}
 for l in open(os.path.join(ROOT, "out/meta.jsonl"), encoding="utf-8"):
     try: r = json.loads(l); meta[r["url"]] = r

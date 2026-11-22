@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://virtuanista.github.io/knowledge-atlas/sitemap.xml

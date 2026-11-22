@@ -82,3 +82,4 @@ for t in TOPICS:
     out[t] = [{"url": k, "score": len(score[(t, k)]), "best": best[(t, k)]} for k in keys]
     print(t, "unique", len(keys), "lists", len(picked[t]))
 json.dump(out, open(os.path.join(ROOT, "out/candidates.json"), "w", encoding="utf-8"), ensure_ascii=False)
+json.dump(picked, open(os.path.join(ROOT, "out/picked.json"), "w", encoding="utf-8"), ensure_ascii=False)
