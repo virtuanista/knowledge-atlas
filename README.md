@@ -33,11 +33,12 @@ Grafo fractal atómico de **3.500 fuentes OSINT** deduplicadas, clasificadas en 
 
 ## Reproducir
 ```bash
-python scripts/discover.sh   # requiere gh autenticado
+python scripts/discover.sh                       # requiere gh autenticado
 python scripts/fetch_readmes.py
 python scripts/parse.py && python scripts/curate.py && python scripts/select.py
-python scripts/crawl.py && python scripts/classify.py
-python scripts/build_data.py && python scripts/make_og.py
+python scripts/crawl.py
+python scripts/classify.py && python scripts/refine_clusters.py
+python scripts/build_data2.py && python scripts/make_og.py
 ```
 
 ## Créditos
