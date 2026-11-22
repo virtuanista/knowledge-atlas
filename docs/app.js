@@ -18,6 +18,7 @@
   const PREV_START = 12;                // zoom (×fitK) donde empiezan las previews
   const PREV_FULL = 36;                 // zoom (×fitK) donde son nítidas
   let MATTE = [], FOCUS = [];
+  let previewHits = [];                 // [x, y, lado, índice] de cada tarjeta dibujada
 
   const $ = (id) => document.getElementById(id);
   const canvas = $("c"), ctx = canvas.getContext("2d");
@@ -315,6 +316,7 @@
   }
   // previews: tarjeta CUADRADA por punto, colocada a distancia del punto, sin tapar otros puntos ni tarjetas
   function drawPreviews(pv, vis, fi) {
+    previewHits.length = 0;
     const cx = W / 2, cy = H / 2;
     const cand = vis.filter((i) => i !== fi && !hidden.has(NODES[i].c));
     const pts = cand.map((i) => {
@@ -364,6 +366,7 @@
       if (!spot) continue;
       const [x, y] = spot;
       placed.push([x, y]); n++;
+      previewHits.push([x, y, S, p.i]);
       // línea guía desde el punto al borde más cercano de la tarjeta
       const ex = clamp(p.sx, x, x + S), ey = clamp(p.sy, y, y + S);
       const onX = ex > x && ex < x + S, onY = ey > y && ey < y + S;
@@ -387,8 +390,18 @@
       ctx.fillStyle = "rgba(200,210,224,.85)";
       ty += 8;
       for (const line of descL) { ctx.fillText(line, x + PAD, ty); ty += 13; }
+      ctx.font = "600 10px system-ui,sans-serif"; ctx.fillStyle = "#66ffd1";
+      ctx.fillText("abrir fuente ↗", x + PAD, y + S - PAD);
     }
     ctx.restore();
+  }
+  // tarjeta bajo el puntero (la última dibujada gana) y apertura segura del enlace
+  function previewAt(sx, sy) {
+    for (let j = previewHits.length - 1; j >= 0; j--) {
+      const [x, y, S, i] = previewHits[j];
+      if (sx >= x && sx <= x + S && sy >= y && sy <= y + S) return i;
+    }
+    return -1;
   }
   function loop() {
     if (tween()) dirty = true;
@@ -484,6 +497,7 @@
       view.x = drag.vx + dx; view.y = drag.vy + dy;
       target = { ...view }; dirty = true; return;
     }
+    canvas.style.cursor = previewAt(e.clientX, e.clientY) >= 0 ? "pointer" : "";
     updateHover();
   });
   function endPointer(e) {
@@ -491,6 +505,8 @@
     if (pointers.size === 0) {
       canvas.classList.remove("drag");
       if (drag && !drag.moved) {
+        const pi = previewAt(e.clientX, e.clientY);
+        if (pi >= 0) { pinned = pi; hover = pi; renderCard(pi, true); drag = null; dirty = true; return; }
         const i = nearest(e.clientX, e.clientY);
         if (i >= 0) { pinned = i; hover = i; renderCard(i, true); }
         else { pinned = -1; hideCard(); }
