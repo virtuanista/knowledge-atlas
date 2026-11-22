@@ -15,6 +15,9 @@
   const PAD = 5;                        // separación entre círculos
   const SIGMAS = [0.13, 0.19, 0.26, 0.34, 0.43, 0.54];   // σ por nivel de desenfoque
   const LEVELS = SIGMAS.length;
+  const PREV_START = 12;                // zoom (×fitK) donde empiezan las previews
+  const PREV_FULL = 36;                 // zoom (×fitK) donde son nítidas
+  let MATTE = [], FOCUS = [];
 
   const $ = (id) => document.getElementById(id);
   const canvas = $("c"), ctx = canvas.getContext("2d");
@@ -37,6 +40,9 @@
   let lastView = "";
 
   // ---------- util ----------
+  const smooth = (a, b, x) => { const t = clamp((x - a) / (b - a), 0, 1); return t * t * (3 - 2 * t); };
+  // radio del punto en pantalla: mate, con mínimo legible
+  const rdPx = (nd) => clamp(AR * 0.5 * (0.9 + 0.05 * Math.min(nd.k, 20)) * view.k, 1.5, 5.5);
   const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
   const hue = (i) => (i * 137.508) % 360;
   const fmt = (n) => n.toLocaleString("es-ES");
@@ -82,7 +88,7 @@
       cl.subs = SUBS.filter((s) => s.c === cl.i && s.atoms.length > 0);
       cl.subs.sort((a, b) => b.atoms.length - a.atoms.length || a.n.localeCompare(b.n));
       cl.subs.forEach((s, j) => {
-        s.r = AR * 1.08 * Math.sqrt(s.atoms.length) + AR * 2.2;
+        s.r = AR * 1.25 * Math.sqrt(s.atoms.length) + AR * 2.2;
         s.x = Math.cos(j * GOLD) * 14 * Math.sqrt(j + 1);
         s.y = Math.sin(j * GOLD) * 14 * Math.sqrt(j + 1);
       });
@@ -98,7 +104,7 @@
       cl.subs.forEach((s) => {
         s.ax = cl.x + s.x; s.ay = cl.y + s.y;
         s.atoms.forEach((ni, j) => {
-          const rr = AR * 1.08 * Math.sqrt(j + 1), t = j * GOLD;
+          const rr = AR * 1.25 * Math.sqrt(j + 1), t = j * GOLD;
           NODES[ni].X = s.ax + Math.cos(t) * rr;
           NODES[ni].Y = s.ay + Math.sin(t) * rr;
         });
@@ -209,53 +215,60 @@
     if (fi >= 0) [fx, fy] = w2s(NODES[fi].X, NODES[fi].Y);
     const cell = Math.max(70, Math.min(W, H) * 0.11);   // px por nivel de desenfoque
     const base = AR * 2.1 * k;
-    const near = k > fitK * 60;
-    const labels = [];
 
-    // átomos: splats gaussianos con profundidad de campo
+    // átomos: halo gaussiano suave (profundidad de campo) + punto mate nítido
+    const visIdx = [];
     ctx.globalCompositeOperation = "lighter";
     for (let i = 0; i < NODES.length; i++) {
       const nd = NODES[i];
       if (hidden.has(nd.c)) continue;
       const [sx, sy] = w2s(nd.X, nd.Y);
+      if (sx < -60 || sy < -60 || sx > W + 60 || sy > H + 60) continue;
+      visIdx.push(i);
+      if (i === fi) continue;
       let lv = 0;
-      if (dof && i !== fi) {
-        lv = Math.min(LEVELS - 1, Math.floor(Math.hypot(sx - fx, sy - fy) / cell));
-      }
-      const s = Math.max(1, base * nd.w * (1 + 0.18 * lv));
-      if (sx + s < 0 || sy + s < 0 || sx - s > W || sy - s > H) continue;
-      let a = (matchFlag && !matchFlag[i]) ? 0.07 : 0.72;
-      if (nd.x) a *= 0.35;                                   // sin respuesta
-      if (lv > 0) a *= 1 - 0.13 * lv;                        // energía repartida al desenfocar
-      if (i === fi) a = 1;
-      ctx.globalAlpha = a;
-      ctx.drawImage(sprites[nd.c][lv], sx - s, sy - s, s * 2, s * 2);
-      if (near && lv <= 1 && labels.length < 160 && a > 0.5) labels.push([sx, sy, nd.t, lv]);
+      if (dof) lv = Math.min(LEVELS - 1, Math.floor(Math.hypot(sx - fx, sy - fy) / cell));
+      const hr = Math.max(3, rdPx(nd) * (2.6 + 0.9 * lv));
+      const dim = (matchFlag && !matchFlag[i]) ? 0.1 : 1;
+      ctx.globalAlpha = Math.max(0, 0.22 * dim * (1 - 0.14 * lv));
+      ctx.drawImage(sprites[nd.c][lv], sx - hr, sy - hr, hr * 2, hr * 2);
+    }
+    // puntos mate: sólidos, sin brillo
+    ctx.globalCompositeOperation = "source-over";
+    for (const i of visIdx) {
+      const nd = NODES[i];
+      if (i === fi) continue;
+      const [sx, sy] = w2s(nd.X, nd.Y);
+      const r = rdPx(nd);
+      const dim = (matchFlag && !matchFlag[i]) ? 0.12 : 1;
+      ctx.globalAlpha = dim * (nd.x ? 0.4 : 0.95);
+      ctx.fillStyle = MATTE[nd.c];
+      ctx.beginPath(); ctx.arc(sx, sy, r, 0, Math.PI * 2); ctx.fill();
     }
     ctx.globalAlpha = 1;
 
-    // objeto señalado: nítido, con halo gaussiano y anillo de foco
+    // objeto señalado: punto nítido + anillo de foco
     if (fi >= 0 && !hidden.has(NODES[fi].c)) {
       const nd = NODES[fi];
-      const hs = clamp(base * nd.w * 4, 24, 240);
+      const r = Math.max(rdPx(nd), 3);
       ctx.globalCompositeOperation = "lighter";
+      const hs = clamp(r * 7, 14, 120);
+      ctx.globalAlpha = 0.5;
       ctx.drawImage(sprites[nd.c][0], fx - hs, fy - hs, hs * 2, hs * 2);
       ctx.globalCompositeOperation = "source-over";
-      ctx.beginPath(); ctx.arc(fx, fy, hs * 0.5, 0, Math.PI * 2);
-      ctx.strokeStyle = `hsla(${CLUS[nd.c].h},90%,80%,0.55)`; ctx.lineWidth = 1.2; ctx.stroke();
+      ctx.globalAlpha = 1;
+      ctx.beginPath(); ctx.arc(fx, fy, r, 0, Math.PI * 2);
+      ctx.fillStyle = FOCUS[nd.c]; ctx.fill();
+      ctx.lineWidth = 1.2; ctx.strokeStyle = "rgba(255,255,255,.7)"; ctx.stroke();
+      ctx.beginPath(); ctx.arc(fx, fy, r + 5, 0, Math.PI * 2);
+      ctx.strokeStyle = `hsla(${CLUS[nd.c].h},90%,80%,0.45)`; ctx.stroke();
     }
 
-    // etiquetas al acercar
-    if (labels.length) {
-      ctx.globalCompositeOperation = "source-over";
-      ctx.font = "11px system-ui,sans-serif";
-      ctx.textAlign = "left";
-      for (const [sx, sy, t, lv] of labels) {
-        ctx.fillStyle = `rgba(230,237,246,${lv === 0 ? 0.95 : 0.55})`;
-        ctx.fillText(t.slice(0, 58), sx + 8, sy - 6);
-      }
-    }
+    // previews: aparecen al acercar, con blur que se resuelve, sin pisarse
+    const pv = smooth(PREV_START * fitK, PREV_FULL * fitK, k);
+    if (pv > 0.02) drawPreviews(pv, visIdx, fi);
     ctx.globalCompositeOperation = "source-over";
+    ctx.globalAlpha = 1;
 
     // tarjeta: fijada → sigue a su nodo; hover → sigue al puntero
     if (cardIdx >= 0 && cardPinned) {
@@ -265,6 +278,64 @@
     } else if (cardIdx >= 0 && lastPt) {
       moveCard(lastPt.x, lastPt.y);
     }
+  }
+  // previews en canvas: tarjeta por punto, colocadas sin solaparse entre sí
+  function drawPreviews(pv, vis, fi) {
+    const cx = W / 2, cy = H / 2;
+    const cand = vis.filter((i) => i !== fi && !hidden.has(NODES[i].c));
+    const pts = cand.map((i) => {
+      const [sx, sy] = w2s(NODES[i].X, NODES[i].Y);
+      return { i, sx, sy, d: Math.hypot(sx - cx, sy - cy) };
+    }).filter((p) => p.sx > 0 && p.sy > 0 && p.sx < W && p.sy < H);
+    pts.sort((a, b) => a.d - b.d);
+    const CW = 206, CH = 58, placed = [], maxCards = 70;
+    // puntos visibles: una tarjeta nunca tapa a otro punto
+    const dots = vis.map((i) => {
+      const [sx, sy] = w2s(NODES[i].X, NODES[i].Y);
+      return [sx, sy, rdPx(NODES[i]) + 2];
+    });
+    const hitsDot = (x, y) => dots.some(([cx, cy, r]) => {
+      const nx = clamp(cx, x, x + CW), ny = clamp(cy, y, y + CH);
+      return Math.hypot(cx - nx, cy - ny) < r;
+    });
+    ctx.save();
+    ctx.filter = `blur(${((1 - pv) * 7).toFixed(2)}px)`;
+    ctx.globalAlpha = pv;
+    let n = 0;
+    for (const p of pts) {
+      if (n >= maxCards) break;
+      const nd = NODES[p.i];
+      const cands = [[p.sx + 14, p.sy - CH / 2], [p.sx - CW - 14, p.sy - CH / 2],
+                     [p.sx + 14, p.sy - CH - 14], [p.sx - CW - 14, p.sy + 14],
+                     [p.sx + 14, p.sy + 14], [p.sx - CW - 14, p.sy - CH - 14]];
+      let spot = null;
+      for (const [x, y] of cands) {
+        if (x < 4 || y < 50 || x + CW > W - 4 || y + CH > H - 4) continue;
+        if (placed.some((r) => x < r[0] + r[2] && x + CW > r[0] && y < r[1] + r[3] && y + CH > r[1])) continue;
+        if (hitsDot(x, y)) continue;
+        spot = [x, y]; break;
+      }
+      if (!spot) continue;
+      const [x, y] = spot;
+      placed.push([x, y, CW, CH]); n++;
+      ctx.strokeStyle = `hsla(${CLUS[nd.c].h},70%,65%,0.8)`; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(p.sx, p.sy);
+      ctx.lineTo(x < p.sx ? x + CW : x, y + CH / 2); ctx.stroke();
+      ctx.fillStyle = "rgba(9,12,18,.92)";
+      ctx.beginPath();
+      if (ctx.roundRect) ctx.roundRect(x, y, CW, CH, 8); else ctx.rect(x, y, CW, CH);
+      ctx.fill();
+      ctx.strokeStyle = `hsla(${CLUS[nd.c].h},65%,60%,0.55)`; ctx.stroke();
+      ctx.font = "600 12px system-ui,sans-serif";
+      ctx.fillStyle = "#e6edf6";
+      ctx.fillText(nd.t.slice(0, 30), x + 9, y + 16);
+      ctx.font = "10px system-ui,sans-serif";
+      ctx.fillStyle = `hsl(${CLUS[nd.c].h},70%,72%)`;
+      ctx.fillText(nd.h.slice(0, 34), x + 9, y + 30);
+      ctx.fillStyle = "rgba(200,210,224,.8)";
+      ctx.fillText(nd.d.slice(0, 40), x + 9, y + 45);
+    }
+    ctx.restore();
   }
   function loop() {
     if (tween()) dirty = true;
@@ -444,7 +515,7 @@
 
   // ---------- carga ----------
   async function boot() {
-    const res = await fetch("data/atlas.json", { cache: "force-cache" });
+    const res = await fetch("data/atlas.json?v=3");
     if (!res.ok) throw new Error("atlas.json " + res.status);
     DATA = await res.json();
     CLUS = DATA.keys.map((key, i) => ({ i, key, label: DATA.labels[i], h: hue(i), subs: [], x: 0, y: 0, r: 0, count: 0 }));
@@ -458,6 +529,8 @@
     NODES.forEach((nd) => { CLUS[nd.c].count++; });
     layout();
     sprites = CLUS.map((cl) => makeSprites(cl.h));
+    MATTE = CLUS.map((cl) => `hsl(${cl.h},34%,46%)`);     // grafeno mate
+    FOCUS = CLUS.map((cl) => `hsl(${cl.h},60%,74%)`);
     resize();
     buildLegend();
     stats.textContent = `${fmt(DATA.stats.total)} fuentes · ${DATA.labels.length} clusters · ${fmt(SUBS.filter((s) => s.atoms.length).length)} subclusters`;
