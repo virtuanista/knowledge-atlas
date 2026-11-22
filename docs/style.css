@@ -19,7 +19,8 @@ html,body{margin:0;height:100%;background:var(--bg);color:var(--fg);
   color:var(--fg);border-radius:999px;padding:7px 14px;outline:none}
 #q:focus{border-color:var(--acc)}
 .stats{color:var(--mute);font-size:12px;white-space:nowrap;margin-left:auto}
-#reset{background:none;border:1px solid var(--line);color:var(--fg);border-radius:8px;padding:4px 10px;cursor:pointer}
+#reset,#dof{background:none;border:1px solid var(--line);color:var(--fg);border-radius:8px;padding:4px 10px;cursor:pointer;font:inherit;font-size:12px}
+#dof[aria-pressed="true"]{border-color:var(--acc);color:var(--acc)}
 .legend{position:fixed;left:12px;top:64px;bottom:12px;z-index:4;width:228px;overflow:auto;
   display:flex;flex-direction:column;gap:4px;padding:8px;background:var(--panel);
   border:1px solid var(--line);border-radius:var(--radius);backdrop-filter:blur(10px)}

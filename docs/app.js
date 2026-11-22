@@ -1,33 +1,45 @@
-/* OSINT Atlas — grafo fractal atómico.
+/* OSINT Atlas — grafo fractal atómico con profundidad de campo gaussiana.
  * Jerarquía: raíz → cluster → subcluster → átomo (fuente).
- * Layout determinista: espiral de Vogel (girasol áureo) + relajación de círculos.
- * Cada átomo es un splat gaussiano; al enfocarlo aparece la tarjeta de preview con blur animado.
- * Todo el texto se inserta con textContent. Los enlaces solo admiten http(s).
+ * - Layout determinista: espiral de Vogel + relajación de círculos.
+ * - Cada átomo es un splat gaussiano. Su tamaño crece con su popularidad (nº de listas que la citan).
+ * - Profundidad de campo: el objeto señalado queda nítido (σ mínimo); los demás se desenfocan
+ *   según su distancia en pantalla al foco (6 niveles de σ precalculados).
+ * - Zoom con tween animado y ancla bajo el cursor; sin saltos al acercar o alejar.
+ * - Todo texto se inserta con textContent. Los enlaces solo admiten http(s).
  */
 (function () {
   "use strict";
 
   const GOLD = Math.PI * (3 - Math.sqrt(5));
-  const AR = 1.5;            // radio base de un átomo (unidades de mundo)
-  const PAD = 5;             // separación entre círculos
-  const SIGMA = 0.30;        // σ del splat gaussiano (normalizado a radio 1)
+  const AR = 1.5;                       // radio base de un átomo (unidades de mundo)
+  const PAD = 5;                        // separación entre círculos
+  const SIGMAS = [0.13, 0.19, 0.26, 0.34, 0.43, 0.54];   // σ por nivel de desenfoque
+  const LEVELS = SIGMAS.length;
 
   const $ = (id) => document.getElementById(id);
   const canvas = $("c"), ctx = canvas.getContext("2d");
-  const card = $("card"), qInput = $("q"), legend = $("legend"), stats = $("stats");
+  const card = $("card"), qInput = $("q"), legend = $("legend"), stats = $("stats"), dofBtn = $("dof");
 
   let DATA = null, NODES = [], CLUS = [], SUBS = [];
-  let W = 0, H = 0, DPR = 1;
-  let view = { x: 0, y: 0, k: 1 };        // screen = world*k + (x,y)
-  let fitK = 1, minK = 0.2, maxK = 400;
+  let W = 0, H = 0, DPR = 1, ROOT_R = 1;
+  let view = { x: 0, y: 0, k: 1 };      // pantalla = mundo*k + (x,y)
+  let target = { x: 0, y: 0, k: 1 };   // destino del tween
+  let fitK = 1, minK = 0.2, maxK = 300;
   let hover = -1, pinned = -1, dirty = true;
-  let hidden = new Set();                  // clusters ocultos
-  let query = "", matchFlag = null;
-  let sprites = [];                        // splat por cluster
+  let hidden = new Set();
+  let matchFlag = null;
+  let dof = true;
+  let sprites = [];                     // [cluster][nivel] -> canvas
+  let lastPt = null;                    // último puntero dentro del canvas
+  let cardIdx = -1, cardPinned = false;
+  const pointers = new Map();
+  let drag = null, pinchD = 0;
+  let lastView = "";
 
   // ---------- util ----------
   const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
   const hue = (i) => (i * 137.508) % 360;
+  const fmt = (n) => n.toLocaleString("es-ES");
   function safeHref(u) {
     try { const p = new URL(u); return (p.protocol === "http:" || p.protocol === "https:") ? p.href : null; }
     catch (e) { return null; }
@@ -38,7 +50,6 @@
     if (text != null) n.textContent = text;
     return n;
   }
-  const fmt = (n) => n.toLocaleString("es-ES");
 
   // ---------- layout ----------
   function relax(circles, iters) {
@@ -65,10 +76,8 @@
     return R;
   }
   function layout() {
-    // 1) átomos por subcluster
     SUBS.forEach((s) => { s.atoms = []; });
     NODES.forEach((nd, ni) => SUBS[nd.s].atoms.push(ni));
-    // 2) subclusters: radio desde Vogel de sus átomos, empaquetados por cluster
     CLUS.forEach((cl) => {
       cl.subs = SUBS.filter((s) => s.c === cl.i && s.atoms.length > 0);
       cl.subs.sort((a, b) => b.atoms.length - a.atoms.length || a.n.localeCompare(b.n));
@@ -80,13 +89,11 @@
       relax(cl.subs, 260);
       cl.r = enclose(cl.subs) + PAD;
     });
-    // 3) clusters en la raíz
     CLUS.forEach((cl, j) => {
       cl.x = Math.cos(j * GOLD) * 40 * Math.sqrt(j + 1);
       cl.y = Math.sin(j * GOLD) * 40 * Math.sqrt(j + 1);
     });
     relax(CLUS.filter((c) => c.subs.length), 320);
-    // 4) coordenadas absolutas: cada átomo en Vogel dentro de su subcluster
     CLUS.forEach((cl) => {
       cl.subs.forEach((s) => {
         s.ax = cl.x + s.x; s.ay = cl.y + s.y;
@@ -97,54 +104,77 @@
         });
       });
     });
-    // radio total
     let R = 0;
     CLUS.forEach((cl) => { if (cl.subs.length) R = Math.max(R, Math.hypot(cl.x, cl.y) + cl.r); });
     ROOT_R = R;
   }
-  let ROOT_R = 1;
 
-  // ---------- sprites gaussianos ----------
-  function makeSprite(h) {
-    const S = 96, c = document.createElement("canvas");
-    c.width = c.height = S;
-    const g = c.getContext("2d"), r = S / 2;
-    const grd = g.createRadialGradient(r, r, 0, r, r, r);
-    for (let i = 0; i <= 10; i++) {
-      const t = i / 10;                                 // radio normalizado
-      const a = Math.exp(-(t * t) / (2 * SIGMA * SIGMA)); // gaussiana
-      grd.addColorStop(t, `hsla(${h},95%,68%,${(a * 0.95).toFixed(3)})`);
-    }
-    g.fillStyle = grd; g.fillRect(0, 0, S, S);
-    return c;
+  // ---------- sprites gaussianos (6 niveles de σ por color) ----------
+  function makeSprites(h) {
+    return SIGMAS.map((sig) => {
+      const S = 128, c = document.createElement("canvas");
+      c.width = c.height = S;
+      const g = c.getContext("2d"), r = S / 2;
+      const grd = g.createRadialGradient(r, r, 0, r, r, r);
+      for (let i = 0; i <= 16; i++) {
+        const t = i / 16;                                        // radio normalizado
+        const gauss = Math.exp(-(t * t) / (2 * sig * sig));      // núcleo gaussiano
+        const edge = Math.pow(1 - t * t, 2);                     // fundido en el borde
+        grd.addColorStop(t, `hsla(${h},95%,68%,${(gauss * edge * 0.95).toFixed(3)})`);
+      }
+      g.fillStyle = grd; g.fillRect(0, 0, S, S);
+      return c;
+    });
   }
 
-  // ---------- resize / view ----------
+  // ---------- vista ----------
   function resize() {
     DPR = Math.min(2, window.devicePixelRatio || 1);
     W = window.innerWidth; H = window.innerHeight;
     canvas.width = Math.round(W * DPR); canvas.height = Math.round(H * DPR);
     canvas.style.width = W + "px"; canvas.style.height = H + "px";
-    fitView(); dirty = true;
+    fitView(true); dirty = true;
   }
-  function fitView() {
+  function fitView(immediate) {
     const side = Math.min(W, H) * 0.92;
     fitK = side / (2 * ROOT_R);
-    minK = fitK * 0.6; maxK = fitK * 900;
-    view.k = fitK; view.x = W / 2; view.y = H / 2;
+    minK = fitK * 0.7; maxK = fitK * 300;
+    target = { x: W / 2, y: H / 2, k: fitK };
+    if (immediate) view = { ...target };
+    dirty = true;
   }
   const w2s = (wx, wy) => [wx * view.k + view.x, wy * view.k + view.y];
   const s2w = (sx, sy) => [(sx - view.x) / view.k, (sy - view.y) / view.k];
+
+  function tween() {
+    const dk = target.k - view.k, dx = target.x - view.x, dy = target.y - view.y;
+    if (Math.abs(dk) <= view.k * 0.0004 && Math.abs(dx) < 0.25 && Math.abs(dy) < 0.25) {
+      if (dk || dx || dy) { view = { ...target }; return true; }
+      return false;
+    }
+    const a = 0.24;
+    view.k += dk * a; view.x += dx * a; view.y += dy * a;
+    return true;
+  }
+  // zoom anclado en (sx,sy): el punto bajo el cursor se queda quieto
+  function zoomAt(sx, sy, factor, immediate) {
+    const k2 = clamp(target.k * factor, minK, maxK);
+    const wx = (sx - target.x) / target.k, wy = (sy - target.y) / target.k;
+    target = { k: k2, x: sx - wx * k2, y: sy - wy * k2 };
+    if (immediate) view = { ...target };
+    dirty = true;
+  }
 
   // ---------- render ----------
   function draw() {
     dirty = false;
     ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
     ctx.globalCompositeOperation = "source-over";
+    ctx.globalAlpha = 1;
     ctx.fillStyle = "#07090d"; ctx.fillRect(0, 0, W, H);
     const k = view.k;
 
-    // clusters + subclusters (contornos)
+    // clusters y subclusters
     ctx.lineWidth = 1;
     CLUS.forEach((cl) => {
       if (!cl.subs.length || hidden.has(cl.i)) return;
@@ -173,44 +203,73 @@
       }
     });
 
-    // átomos: splats aditivos
+    // foco: átomo señalado (pinned > hover) o centro de pantalla
+    const fi = pinned >= 0 ? pinned : hover;
+    let fx = W / 2, fy = H / 2;
+    if (fi >= 0) [fx, fy] = w2s(NODES[fi].X, NODES[fi].Y);
+    const cell = Math.max(70, Math.min(W, H) * 0.11);   // px por nivel de desenfoque
+    const base = AR * 2.1 * k;
+    const near = k > fitK * 60;
+    const labels = [];
+
+    // átomos: splats gaussianos con profundidad de campo
     ctx.globalCompositeOperation = "lighter";
-    const splat = AR * 3.2 * k;                    // radio visual del splat
-    const hasQ = matchFlag !== null;
     for (let i = 0; i < NODES.length; i++) {
       const nd = NODES[i];
       if (hidden.has(nd.c)) continue;
       const [sx, sy] = w2s(nd.X, nd.Y);
-      if (sx < -splat || sy < -splat || sx > W + splat || sy > H + splat) continue;
-      let alpha = 1;
-      if (hasQ && !matchFlag[i]) alpha = 0.06;
-      if (nd.x) alpha *= 0.35;                     // sin respuesta
-      const sz = Math.max(1.2, splat);
-      ctx.globalAlpha = alpha;
-      ctx.drawImage(sprites[nd.c], sx - sz, sy - sz, sz * 2, sz * 2);
+      let lv = 0;
+      if (dof && i !== fi) {
+        lv = Math.min(LEVELS - 1, Math.floor(Math.hypot(sx - fx, sy - fy) / cell));
+      }
+      const s = Math.max(1, base * nd.w * (1 + 0.18 * lv));
+      if (sx + s < 0 || sy + s < 0 || sx - s > W || sy - s > H) continue;
+      let a = (matchFlag && !matchFlag[i]) ? 0.07 : 0.72;
+      if (nd.x) a *= 0.35;                                   // sin respuesta
+      if (lv > 0) a *= 1 - 0.13 * lv;                        // energía repartida al desenfocar
+      if (i === fi) a = 1;
+      ctx.globalAlpha = a;
+      ctx.drawImage(sprites[nd.c][lv], sx - s, sy - s, s * 2, s * 2);
+      if (near && lv <= 1 && labels.length < 160 && a > 0.5) labels.push([sx, sy, nd.t, lv]);
     }
     ctx.globalAlpha = 1;
 
-    // halo gaussiano (preview) del átomo enfocado
-    ctx.globalCompositeOperation = "lighter";
-    const focus = pinned >= 0 ? pinned : hover;
-    if (focus >= 0 && !hidden.has(NODES[focus].c)) {
-      const nd = NODES[focus];
-      const [sx, sy] = w2s(nd.X, nd.Y);
-      const hs = Math.max(26, splat * 6);
-      ctx.globalAlpha = 0.9;
-      ctx.drawImage(sprites[nd.c], sx - hs, sy - hs, hs * 2, hs * 2);
-      ctx.globalAlpha = 1;
-      if (k > fitK * 6) {                         // zoom alto: etiqueta del átomo
-        ctx.globalCompositeOperation = "source-over";
-        ctx.font = "12px system-ui,sans-serif"; ctx.textAlign = "left";
-        ctx.fillStyle = "rgba(230,237,246,.9)";
-        ctx.fillText(nd.t.slice(0, 60), sx + hs * 0.6, sy - hs * 0.6);
+    // objeto señalado: nítido, con halo gaussiano y anillo de foco
+    if (fi >= 0 && !hidden.has(NODES[fi].c)) {
+      const nd = NODES[fi];
+      const hs = clamp(base * nd.w * 4, 24, 240);
+      ctx.globalCompositeOperation = "lighter";
+      ctx.drawImage(sprites[nd.c][0], fx - hs, fy - hs, hs * 2, hs * 2);
+      ctx.globalCompositeOperation = "source-over";
+      ctx.beginPath(); ctx.arc(fx, fy, hs * 0.5, 0, Math.PI * 2);
+      ctx.strokeStyle = `hsla(${CLUS[nd.c].h},90%,80%,0.55)`; ctx.lineWidth = 1.2; ctx.stroke();
+    }
+
+    // etiquetas al acercar
+    if (labels.length) {
+      ctx.globalCompositeOperation = "source-over";
+      ctx.font = "11px system-ui,sans-serif";
+      ctx.textAlign = "left";
+      for (const [sx, sy, t, lv] of labels) {
+        ctx.fillStyle = `rgba(230,237,246,${lv === 0 ? 0.95 : 0.55})`;
+        ctx.fillText(t.slice(0, 58), sx + 8, sy - 6);
       }
     }
     ctx.globalCompositeOperation = "source-over";
+
+    // tarjeta: fijada → sigue a su nodo; hover → sigue al puntero
+    if (cardIdx >= 0 && cardPinned) {
+      const nd = NODES[cardIdx];
+      const [sx, sy] = w2s(nd.X, nd.Y);
+      moveCard(sx, sy);
+    } else if (cardIdx >= 0 && lastPt) {
+      moveCard(lastPt.x, lastPt.y);
+    }
   }
   function loop() {
+    if (tween()) dirty = true;
+    const key = view.x.toFixed(2) + "|" + view.y.toFixed(2) + "|" + view.k.toFixed(5);
+    if (key !== lastView) { lastView = key; updateHover(); dirty = true; }
     if (dirty) draw();
     requestAnimationFrame(loop);
   }
@@ -218,7 +277,7 @@
   // ---------- hit test ----------
   function nearest(sx, sy) {
     const [wx, wy] = s2w(sx, sy);
-    const rad = 10 / view.k;                       // 10px en pantalla
+    const rad = 10 / view.k;
     let best = -1, bd = rad * rad;
     for (let i = 0; i < NODES.length; i++) {
       const nd = NODES[i];
@@ -229,18 +288,25 @@
     }
     return best;
   }
+  function updateHover() {
+    if (!lastPt || pointers.size > 0) return;
+    const i = nearest(lastPt.x, lastPt.y);
+    if (i !== hover) { hover = i; dirty = true; }
+    if (pinned < 0) {
+      if (i >= 0) renderCard(i, false); else hideCard();
+    }
+  }
 
-  // ---------- card ----------
-  function showCard(i, sx, sy, isPinned) {
+  // ---------- tarjeta ----------
+  function renderCard(i, isPinned) {
+    if (i === cardIdx && isPinned === cardPinned) return;
     const nd = NODES[i];
     card.hidden = false;
-    card.className = "card";
-    card.classList.toggle("pin", isPinned);
     card.textContent = "";
     card.appendChild(el("p", "t", nd.t));
     card.appendChild(el("div", "h", nd.h));
     const cl = CLUS[nd.c], sub = SUBS[nd.s];
-    card.appendChild(el("div", "m", `${cl.label} · ${sub.n}${nd.l ? " · " + nd.l : ""}`));
+    card.appendChild(el("div", "m", `${cl.label} · ${sub.n}${nd.l ? " · " + nd.l : ""} · ${nd.k} listas`));
     if (nd.d) card.appendChild(el("p", "d", nd.d));
     if (nd.x) card.appendChild(el("div", "x", "sin respuesta al último rastreo"));
     const href = safeHref(nd.u);
@@ -249,23 +315,25 @@
       a.href = href; a.target = "_blank"; a.rel = "noopener noreferrer nofollow";
       card.appendChild(a);
     }
-    // posición junto al puntero
-    const pad = 16, cw = card.offsetWidth || 300, ch = card.offsetHeight || 160;
-    let x = sx + pad, y = sy + pad;
-    if (x + cw > W - 8) x = sx - cw - pad;
+    cardIdx = i; cardPinned = isPinned;
+    card.classList.toggle("pin", isPinned);
+    card.classList.remove("on");
+    requestAnimationFrame(() => requestAnimationFrame(() => card.classList.add("on")));
+  }
+  function moveCard(sx, sy) {
+    const cw = card.offsetWidth || 300, ch = card.offsetHeight || 160;
+    let x = sx + 16, y = sy + 16;
+    if (x + cw > W - 8) x = sx - cw - 16;
     if (y + ch > H - 8) y = H - ch - 8;
     card.style.left = Math.max(8, x) + "px";
     card.style.top = Math.max(8, y) + "px";
-    requestAnimationFrame(() => requestAnimationFrame(() => card.classList.add("on")));
   }
   function hideCard() {
+    cardIdx = -1; cardPinned = false;
     card.classList.remove("on", "pin");
-    card.hidden = true;
   }
 
   // ---------- interacción ----------
-  const pointers = new Map();
-  let drag = null, pinchD = 0;
   canvas.addEventListener("pointerdown", (e) => {
     canvas.setPointerCapture(e.pointerId);
     pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
@@ -277,29 +345,21 @@
     canvas.classList.add("drag");
   });
   canvas.addEventListener("pointermove", (e) => {
+    lastPt = { x: e.clientX, y: e.clientY };
     if (pointers.has(e.pointerId)) pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
     if (pointers.size === 2) {
       const [a, b] = [...pointers.values()];
       const d = Math.hypot(a.x - b.x, a.y - b.y) || 1;
-      const mx = (a.x + b.x) / 2, my = (a.y + b.y) / 2;
-      zoomAt(mx, my, d / (pinchD || d));
-      pinchD = d; dirty = true; return;
+      zoomAt((a.x + b.x) / 2, (a.y + b.y) / 2, d / (pinchD || d), true);
+      pinchD = d; return;
     }
     if (drag && pointers.size === 1 && e.buttons) {
       const dx = e.clientX - drag.x, dy = e.clientY - drag.y;
       if (Math.abs(dx) + Math.abs(dy) > 3) drag.moved = true;
       view.x = drag.vx + dx; view.y = drag.vy + dy;
-      dirty = true; hideCard(); pinned = -1; return;
+      target = { ...view }; dirty = true; return;
     }
-    const i = nearest(e.clientX, e.clientY);
-    if (i !== hover) {
-      hover = i; dirty = true;
-      if (i >= 0 && pinned < 0) showCard(i, e.clientX, e.clientY, false);
-      else if (i < 0 && pinned < 0) hideCard();
-    } else if (hover >= 0 && pinned < 0) {
-      // reposiciona la tarjeta junto al puntero
-      showCard(hover, e.clientX, e.clientY, false);
-    }
+    updateHover();
   });
   function endPointer(e) {
     pointers.delete(e.pointerId);
@@ -307,7 +367,7 @@
       canvas.classList.remove("drag");
       if (drag && !drag.moved) {
         const i = nearest(e.clientX, e.clientY);
-        if (i >= 0) { pinned = i; hover = i; showCard(i, e.clientX, e.clientY, true); }
+        if (i >= 0) { pinned = i; hover = i; renderCard(i, true); }
         else { pinned = -1; hideCard(); }
         dirty = true;
       }
@@ -316,29 +376,33 @@
   }
   canvas.addEventListener("pointerup", endPointer);
   canvas.addEventListener("pointercancel", endPointer);
-  canvas.addEventListener("pointerleave", () => { if (pinned < 0) { hover = -1; hideCard(); dirty = true; } });
-
-  function zoomAt(sx, sy, factor) {
-    const k2 = clamp(view.k * factor, minK, maxK);
-    const f = k2 / view.k;
-    view.x = sx - (sx - view.x) * f;
-    view.y = sy - (sy - view.y) * f;
-    view.k = k2; dirty = true;
-  }
+  canvas.addEventListener("pointerleave", () => {
+    lastPt = null;
+    if (pinned < 0) { hover = -1; hideCard(); dirty = true; }
+  });
   canvas.addEventListener("wheel", (e) => {
     e.preventDefault();
-    zoomAt(e.clientX, e.clientY, Math.exp(-e.deltaY * 0.0016));
-    if (hover >= 0 || pinned >= 0) { /* mantiene tarjeta */ }
+    zoomAt(e.clientX, e.clientY, Math.exp(-clamp(e.deltaY, -120, 120) * 0.0028));
   }, { passive: false });
-  canvas.addEventListener("dblclick", (e) => {
-    zoomAt(e.clientX, e.clientY, 2.2);
-  });
+  canvas.addEventListener("dblclick", (e) => zoomAt(e.clientX, e.clientY, 2.2));
 
   window.addEventListener("keydown", (e) => {
-    if (e.key === "/" && document.activeElement !== qInput) { e.preventDefault(); qInput.focus(); }
-    if (e.key === "Escape") { pinned = -1; hideCard(); qInput.blur(); dirty = true; }
+    if (document.activeElement === qInput) {
+      if (e.key === "Escape") qInput.blur();
+      return;
+    }
+    if (e.key === "/") { e.preventDefault(); qInput.focus(); }
+    else if (e.key === "Escape") { pinned = -1; hideCard(); dirty = true; }
+    else if (e.key === "+" || e.key === "=") zoomAt(W / 2, H / 2, 1.5);
+    else if (e.key === "-") zoomAt(W / 2, H / 2, 1 / 1.5);
+    else if (e.key === "0") fitView(false);
+    else if (e.key === "d" || e.key === "D") toggleDof();
   });
-  $("reset").addEventListener("click", () => { fitView(); pinned = -1; hideCard(); dirty = true; });
+  function toggleDof() {
+    dof = !dof; dofBtn.setAttribute("aria-pressed", String(dof)); dirty = true;
+  }
+  dofBtn.addEventListener("click", toggleDof);
+  $("reset").addEventListener("click", () => { pinned = -1; hideCard(); fitView(false); });
   window.addEventListener("resize", resize);
 
   // ---------- búsqueda ----------
@@ -346,14 +410,11 @@
   qInput.addEventListener("input", () => {
     clearTimeout(qTimer);
     qTimer = setTimeout(() => {
-      query = qInput.value.trim().toLowerCase();
-      if (!query) { matchFlag = null; }
+      const q = qInput.value.trim().toLowerCase();
+      if (!q) matchFlag = null;
       else {
         matchFlag = new Array(NODES.length);
-        for (let i = 0; i < NODES.length; i++) {
-          const nd = NODES[i];
-          matchFlag[i] = nd._q.indexOf(query) !== -1;
-        }
+        for (let i = 0; i < NODES.length; i++) matchFlag[i] = NODES[i]._q.indexOf(q) !== -1;
       }
       dirty = true;
     }, 120);
@@ -367,7 +428,8 @@
       const b = el("button", "chip");
       b.type = "button";
       b.setAttribute("aria-pressed", hidden.has(cl.i) ? "false" : "true");
-      const sw = el("span", "sw"); sw.style.background = `hsl(${cl.h},70%,62%)`; sw.style.color = `hsl(${cl.h},70%,62%)`;
+      const sw = el("span", "sw");
+      sw.style.background = `hsl(${cl.h},70%,62%)`; sw.style.color = `hsl(${cl.h},70%,62%)`;
       b.appendChild(sw);
       b.appendChild(el("span", "lb", cl.label));
       b.appendChild(el("span", "n", fmt(cl.count)));
@@ -383,20 +445,22 @@
   // ---------- carga ----------
   async function boot() {
     const res = await fetch("data/atlas.json", { cache: "force-cache" });
+    if (!res.ok) throw new Error("atlas.json " + res.status);
     DATA = await res.json();
     CLUS = DATA.keys.map((key, i) => ({ i, key, label: DATA.labels[i], h: hue(i), subs: [], x: 0, y: 0, r: 0, count: 0 }));
     SUBS = DATA.subs.map((s, si) => ({ si, c: s.c, n: s.n, atoms: [], x: 0, y: 0, r: 0 }));
     NODES = DATA.nodes.map((n) => ({
-      u: n.u, h: n.h, t: n.t, d: n.d, c: n.c, s: n.s, k: n.k, l: n.l, x: n.x, X: 0, Y: 0,
+      u: n.u, h: n.h, t: n.t, d: n.d, c: n.c, s: n.s, k: n.k, l: n.l, x: n.x,
+      w: 0.8 + 0.09 * Math.min(n.k, 20),     // tamaño gaussiano ∝ popularidad
+      X: 0, Y: 0,
       _q: (n.t + " " + n.h + " " + n.d + " " + n.u).toLowerCase()
     }));
     NODES.forEach((nd) => { CLUS[nd.c].count++; });
     layout();
-    sprites = CLUS.map((cl) => makeSprite(cl.h));
+    sprites = CLUS.map((cl) => makeSprites(cl.h));
     resize();
     buildLegend();
-    const st = DATA.stats;
-    stats.textContent = `${fmt(st.total)} fuentes · ${DATA.labels.length} clusters · ${fmt(SUBS.filter((s) => s.atoms && s.atoms.length).length)} subclusters`;
+    stats.textContent = `${fmt(DATA.stats.total)} fuentes · ${DATA.labels.length} clusters · ${fmt(SUBS.filter((s) => s.atoms.length).length)} subclusters`;
     requestAnimationFrame(loop);
   }
   boot().catch((err) => {

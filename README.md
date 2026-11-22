@@ -12,8 +12,20 @@ Grafo fractal atómico de **3.500 fuentes OSINT** deduplicadas, clasificadas en 
 - **Datos:** `scripts/build_data.py` → `docs/data/atlas.json`.
 - **Render:** `docs/app.js`. Layout determinista (espiral de Vogel + relajación de círculos) en tres niveles: cluster → subcluster → átomo. Cada átomo es un splat gaussiano aditivo; al enfocarlo aparece la tarjeta de preview con blur animado. Canvas 2D, sin dependencias externas.
 
+## Capturas
+
+| Vista general | Cercano + profundidad de campo | Lejano |
+|---|---|---|
+| ![overview](docs/img/overview.jpg) | ![near](docs/img/near-dof.jpg) | ![far](docs/img/far.jpg) |
+
+## Profundidad de campo
+- El átomo señalado (hover o clic) queda nítido con anillo de foco.
+- Cada átomo se desenfoca según su distancia en pantalla al foco: 6 niveles de σ gaussiano precalculados por cluster.
+- El tamaño del splat crece con la popularidad (nº de listas que citan la fuente).
+- Botón **DOF** o tecla `D` para activar/desactivar.
+
 ## Uso
-- Rueda / pinch: zoom. Arrastrar: mover. Doble clic: acercar.
+- Rueda / pinch: zoom anclado al cursor (animado). Arrastrar: mover. Doble clic: acercar. `+` / `-`: zoom. `0`: vista general.
 - Clic en átomo: fijar tarjeta. Esc: soltar.
 - `/`: buscar. Botones de la izquierda: ocultar/mostrar clusters.
 
