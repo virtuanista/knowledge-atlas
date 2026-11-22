@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://virtuanista.github.io/osint-atlas/sitemap.xml
