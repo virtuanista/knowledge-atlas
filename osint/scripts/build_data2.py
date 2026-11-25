@@ -1,4 +1,4 @@
-"""Construye docs/data/atlas.json desde out/classified2.json (clusters + subclusters refinados)."""
+"""Construye docs/data/osint.json desde out/classified2.json (clusters + subclusters refinados)."""
 import json, os, re, collections
 from urllib.parse import urlsplit
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -30,7 +30,7 @@ for it in c2["items"]:
     nodes.append({"u": u, "h": host, "t": title, "d": desc, "c": cidx[it["cluster2"]],
                   "s": subidx[(it["cluster2"], it["sub2"])], "k": it["score"],
                   "l": m.get("lang", "") if ok else "", "x": 1 if (m and not ok) else 0})
-data = {"labels": [LBL[c] for c in ORDER], "keys": ORDER, "subs": subs, "nodes": nodes,
+data = {"topic": "osint", "title": "OSINT", "labels": [LBL[c] for c in ORDER], "keys": ORDER, "subs": subs, "nodes": nodes,
         "stats": {"total": len(nodes), "crawled": len(meta), "live": live, "dead": dead}}
-json.dump(data, open(os.path.join(ROOT, "docs/data/atlas.json"), "w", encoding="utf-8"), ensure_ascii=False, separators=(",", ":"))
+json.dump(data, open(os.path.join(ROOT, "../docs/data/osint.json"), "w", encoding="utf-8"), ensure_ascii=False, separators=(",", ":"))
 print("nodes", len(nodes), "clusters", len(ORDER), "subs", len(subs), data["stats"])

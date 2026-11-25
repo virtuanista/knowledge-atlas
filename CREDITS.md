@@ -2,6 +2,8 @@
 
 Los enlaces, títulos y descripciones son de sus autores. Este proyecto solo los agrupa, clasifica y visualiza, y enlaza siempre a la fuente original.
 
+Los créditos del grafo de OSINT están en [osint/CREDITS.md](osint/CREDITS.md).
+
 ## IA y LLM
 
 | Lista (repo) | Licencia | Estrellas |

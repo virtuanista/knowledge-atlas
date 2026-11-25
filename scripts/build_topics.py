@@ -155,4 +155,9 @@ for t in TOPIC_LABEL:
     json.dump(data, open(os.path.join(ROOT, f"docs/data/{t}.json"), "w", encoding="utf-8"), ensure_ascii=False, separators=(",", ":"))
     index.append({"id": t, "title": TOPIC_LABEL[t], "nodes": len(nodes), "clusters": len(cl_list), "subs": len(subs)})
     print(t, index[-1])
+# OSINT tiene su propia tubería (osint/scripts) y va primero: es el grafo por defecto.
+osint = os.path.join(ROOT, "docs/data/osint.json")
+if os.path.exists(osint):
+    o = json.load(open(osint, encoding="utf-8"))
+    index.insert(0, {"id": "osint", "title": o["title"], "nodes": len(o["nodes"]), "clusters": len(o["labels"]), "subs": len(o["subs"])})
 json.dump(index, open(os.path.join(ROOT, "docs/data/index.json"), "w", encoding="utf-8"), ensure_ascii=False)

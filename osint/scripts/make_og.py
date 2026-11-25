@@ -48,5 +48,5 @@ def chunk(t, d):
     return struct.pack(">I", len(d)) + t + d + struct.pack(">I", zlib.crc32(t + d) & 0xffffffff)
 png = b"\x89PNG\r\n\x1a\n" + chunk(b"IHDR", struct.pack(">IIBBBBB", W, H, 8, 2, 0, 0, 0)) \
     + chunk(b"IDAT", zlib.compress(bytes(raw), 9)) + chunk(b"IEND", b"")
-open(os.path.join(ROOT, "docs/og.png"), "wb").write(png)
+open(os.path.join(ROOT, "../docs/og.png"), "wb").write(png)
 print("og.png bytes", len(png))

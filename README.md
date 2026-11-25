@@ -1,23 +1,26 @@
 # Knowledge Atlas
 
-Grafos fractales de fuentes técnicas, uno por tema. Mismo motor visual que [OSINT Atlas](https://github.com/virtuanista/osint-atlas): clusters → subclusters → puntos, con previews al acercar.
+Seis grafos fractales con 5.958 fuentes, en una sola web. Se abre con **OSINT** y un selector cambia de grafo: clusters → subclusters → puntos, con previews al acercar.
 
 **Demo:** https://virtuanista.github.io/knowledge-atlas/
 
 ## Vista
 
-![Grafo de IA y LLM](docs/img/ia.jpg)
+| OSINT | Zoom: previews | IA y LLM |
+|---|---|---|
+| ![OSINT](docs/img/osint-overview.jpg) | ![Previews](docs/img/osint-previews-zoom.jpg) | ![IA](docs/img/ia.jpg) |
 
 ## Temas
 | Grafo | Fuentes |
 |---|---|
+| OSINT (por defecto) | ~430 listas OSINT; ver [osint/](osint/README.md) |
 | IA y LLM | listas awesome de LLM, ML, agentes y RAG |
 | Algoritmos y estructuras de datos | listas awesome de algoritmos, CS e interview prep |
 | Estándares web | listas awesome de web standards y plataforma web |
 | Datasets abiertos | listas awesome de datasets y datos abiertos |
 | Juegos y game dev | listas awesome de game dev, motores y juegos |
 
-Cifras por tema: IA 590 · Algoritmos 490 · Estándares 380 · Datasets 500 · Juegos 498 fuentes.
+Cifras por tema: OSINT 3.500 · IA 590 · Algoritmos 490 · Estándares 380 · Datasets 500 · Juegos 498 fuentes.
 
 ## Cómo se construye
 1. `scripts/discover.sh`: busca listas awesome por tema con `gh search repos`.
@@ -34,7 +37,7 @@ Cifras por tema: IA 590 · Algoritmos 490 · Estándares 380 · Datasets 500 · 
 - Los metadatos (título, descripción) se leen una vez, en el momento de la construcción.
 
 ## Uso
-- Selector arriba a la izquierda para cambiar de grafo (`?g=ia`, `?g=algoritmos`, …).
+- Selector arriba a la izquierda para cambiar de grafo (`?g=osint`, `?g=ia`, `?g=algoritmos`, …).
 - Rueda / pinch: zoom anclado al cursor. Doble clic: acercar. `+` / `-` / `0`.
 - Clic en un punto: fija su tarjeta y el botón "abrir fuente" es un enlace nativo.
 - Esc: suelta la selección. `/`: buscar.
@@ -47,7 +50,7 @@ python scripts/build_topics.py && python scripts/make_credits.py
 ```
 
 ## Créditos
-Ver [CREDITS.md](CREDITS.md). Código bajo MIT; contenido de terceros bajo las licencias de sus autores.
+Ver [CREDITS.md](CREDITS.md) y [osint/CREDITS.md](osint/CREDITS.md). Código bajo MIT; contenido de terceros bajo las licencias de sus autores.
 
 <p align="center">
 	Repositorio generado por <a href="https://github.com/virtuanista" target="_blank">virtu 🎣</a>

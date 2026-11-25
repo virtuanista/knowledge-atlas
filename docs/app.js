@@ -595,7 +595,7 @@
     stats.textContent = `${fmt(DATA.stats.total)} fuentes · ${DATA.labels.length} clusters · ${fmt(SUBS.filter((s) => s.atoms.length).length)} subclusters`;
   }
   async function loadTopic(id) {
-    const res = await fetch(`data/${id}.json?v=1`);
+    const res = await fetch(`data/${id}.json?v=2`);
     if (!res.ok) throw new Error(`${id}.json ${res.status}`);
     DATA = await res.json();
     currentTopic = id;
@@ -620,7 +620,7 @@
     dirty = true;
   }
   async function boot() {
-    const idx = await (await fetch("data/index.json?v=1")).json();
+    const idx = await (await fetch("data/index.json?v=2")).json();
     TOPICS = idx;
     const sel = $("topic");
     idx.forEach((t) => {

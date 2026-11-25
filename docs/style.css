@@ -18,6 +18,8 @@ html,body{margin:0;height:100%;background:var(--bg);color:var(--fg);
 #q{flex:1;max-width:340px;min-width:0;background:rgba(255,255,255,.05);border:1px solid var(--line);
   color:var(--fg);border-radius:999px;padding:7px 14px;outline:none}
 #q:focus{border-color:var(--acc)}
+#topic{min-width:0;max-width:260px;background:#111722;border:1px solid var(--line);color:var(--fg);border-radius:8px;padding:6px 10px;font:inherit;font-size:13px}
+#topic:focus-visible{outline:2px solid var(--acc)}
 .stats{color:var(--mute);font-size:12px;white-space:nowrap;margin-left:auto}
 #reset,#dof{background:none;border:1px solid var(--line);color:var(--fg);border-radius:8px;padding:4px 10px;cursor:pointer;font:inherit;font-size:12px}
 #dof[aria-pressed="true"]{border-color:var(--acc);color:var(--acc)}

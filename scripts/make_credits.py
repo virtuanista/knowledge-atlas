@@ -10,7 +10,8 @@ for t in TOPIC_LABEL:
         p = l.rstrip("\n").split("\t")
         if len(p) >= 3: info.setdefault(p[0], (p[2], p[1]))
 lines = ["# Créditos y atribución", "",
-         "Los enlaces, títulos y descripciones son de sus autores. Este proyecto solo los agrupa, clasifica y visualiza, y enlaza siempre a la fuente original.", ""]
+         "Los enlaces, títulos y descripciones son de sus autores. Este proyecto solo los agrupa, clasifica y visualiza, y enlaza siempre a la fuente original.", "",
+         "Los créditos del grafo de OSINT están en [osint/CREDITS.md](osint/CREDITS.md).", ""]
 for t, label in TOPIC_LABEL.items():
     lines += [f"## {label}", "", "| Lista (repo) | Licencia | Estrellas |", "|---|---|---|"]
     for r in picked[t]:
