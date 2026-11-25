@@ -27,9 +27,9 @@ Cifras por tema: OSINT 3.500 · IA 590 · Algoritmos 490 · Estándares 380 · D
 ## Cómo se construye
 1. `scripts/discover.sh`: busca listas awesome por tema con `gh search repos`.
 2. `scripts/extract.py`: baja los READMEs, extrae enlaces, dedupe y ranking por nº de listas que los citan. Excluye listas fuera de tema por nombre (seguridad, CSS, etc.).
-5. `scripts/make_credits.py`: genera CREDITS.md solo con las listas que aportaron fuentes.
 3. `scripts/select_crawl.py`: toma el top por tema y lee `<title>` y meta description de cada URL.
 4. `scripts/build_topics.py`: TF-IDF + k-means determinista. Los grupos de más de 110 nodos se reclusterizan con su propio TF-IDF (división fractal, hasta 3 niveles). Escribe `docs/data/<tema>.json`.
+5. `scripts/make_credits.py`: genera CREDITS.md solo con las listas que aportaron fuentes.
 
 ## Limitaciones
 - Las fuentes vienen de listas comunitarias: pueden tener enlaces obsoletos o fuera de tema. Se filtra por palabras clave (seguridad ofensiva, CSS/UI), pero el filtro no es perfecto.

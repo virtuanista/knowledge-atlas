@@ -27,9 +27,9 @@ Figures by topic: OSINT 3,500 · AI 590 · Algorithms 490 · Standards 380 · Da
 ## How it is built
 1. `scripts/discover.sh`: finds awesome lists by topic with `gh search repos`.
 2. `scripts/extract.py`: downloads the READMEs, extracts links, dedupes and ranks by the number of lists that cite them. Excludes off-topic lists by name (security, CSS, etc.).
-5. `scripts/make_credits.py`: generates CREDITS.md with only the lists that contributed sources.
 3. `scripts/select_crawl.py`: takes the top per topic and reads the `<title>` and meta description of each URL.
 4. `scripts/build_topics.py`: TF-IDF + deterministic k-means. Groups of more than 110 nodes are reclustered with their own TF-IDF (fractal division, up to 3 levels). Writes `docs/data/<topic>.json`.
+5. `scripts/make_credits.py`: generates CREDITS.md with only the lists that contributed sources.
 
 ## Limitations
 - The sources come from community lists: they may contain outdated or off-topic links. They are filtered by keyword (offensive security, CSS/UI), but the filter is not perfect.
