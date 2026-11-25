@@ -1,3 +1,5 @@
+<p align="center"><b>Español</b> · <a href="README.en.md">English</a></p>
+
 # Knowledge Atlas
 
 Seis grafos fractales con 5.958 fuentes, en una sola web. Se abre con **OSINT** y un selector cambia de grafo: clusters → subclusters → puntos, con previews al acercar.
